@@ -1,10 +1,12 @@
 # 语言表达 · Chinese Expression
 
-一份面向中文写作与润色的 Agent Skill。围绕作者的核心想法选择信息、组织论证，在同一份文档上分阶段修改，让重点讲清楚、句间逻辑成立，并保留作者的语言风格。
+一份面向中文写作与润色的 Agent Skill，第一期聚焦技术分享文档：讲清一个技术或模型解决什么问题、如何工作、与其他方案有什么区别，以及如何判断它是否适合自己的场景。
+
+围绕作者的核心想法选择信息、组织论证，在同一份文档上分阶段修改，让重点讲清楚、句间逻辑成立，并保留作者的语言风格。
 
 **想法驱动，信息支撑。想法决定需要表达什么，逻辑决定如何组织与表达信息。**
 
-适用于中文文章、技术说明、方案、汇报和基于材料的文档写作。技能主体、规则和使用提示均为中文，技术标识为 `chinese-expression`。
+当前示例与使用指南围绕模型介绍、技术机制解释和方案比较展开。技能主体、规则和使用提示均为中文，技术标识为 `chinese-expression`。
 
 [阅读完整技能](skills/chinese-expression/SKILL.md) · [下载发布包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
 
@@ -45,18 +47,19 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 ### 润色已有文档
 
 ```text
-请使用 $chinese-expression 润色 article.md。
-目标读者是第一次接触这个主题的同事，重点讲清方案的判断依据。
+请使用 $chinese-expression 润色 technical-share.md。
+目标读者是有工程经验、第一次接触这个技术的同事。
+重点讲清核心机制、适用条件，以及与现有方案的差别。
 保留我的立场与语言风格，先保存大纲，再分阶段修改。
-生成 article-polished.md，并保留原文件。
+生成 technical-share-polished.md，并保留原文件。
 可以补充公开资料；无法核实的信息请单独说明。
 ```
 
 ### 基于固定材料成稿
 
 ```text
-请使用 $chinese-expression，根据 notes.md 写一份项目复盘。
-读者是项目组成员，重点解释失败原因及下一次如何避免。
+请使用 $chinese-expression，根据 notes.md 写一份模型技术分享。
+读者是应用开发工程师，重点解释输入输出、核心机制和选型依据。
 只使用输入材料，不新增外部事实、数据或真实案例。
 按流程保存大纲和正文；材料不足以支撑的判断请指出。
 ```
@@ -64,14 +67,27 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 ### 开放式写作
 
 ```text
-请使用 $chinese-expression 写一篇关于团队知识库维护的中文文章。
-核心想法是：知识库需要明确维护责任和更新时机。
-先确认问题并保存大纲，重点解释维护机制如何落地。
+请使用 $chinese-expression 写一份关于 TypeSafe AI 的 Jev 的技术分享。
+面向使用过大模型 API 的工程师，回答它与其他模型方案有什么区别。
+重点解释输入输出、决策方式、概率与置信度，以及它在软件中的作用。
+从同一个任务出发，比较结构化输出的语言模型、推理模型和专用分类器。
+先确认问题并保存大纲，明确重点、标题层级和需要补充的依据。
 根据大纲搜集可靠依据，在同一份工作文档上完成起草、校验和风格调整。
-语言直接、具体，适合中小团队负责人阅读。
+语言直接、具体，关键概念要解释，厂商声明与独立测评结论要区分。
 ```
 
-提供原稿、目标读者、核心想法、材料边界和风格参考，有助于 agent 判断重点与详略。完整的说明性示例见 [润色示例](examples/润色示例.md)。
+提供原稿、目标读者、核心想法、材料边界和风格参考，有助于 agent 判断重点与详略。
+
+## 第一期示例：Jev 技术分享
+
+围绕“Jev 与其他模型有什么区别”，展示从大纲、补充资料到技术说明的过程。读者可以直接阅读正文，也可以查看信息如何支撑各部分。
+
+- [技术分享正文](examples/jev/技术分享.md)：输入输出、模型方案比较、概率含义与接入流程。
+- [已保存的大纲](examples/jev/大纲.md)：标题的从属关系、重点及详略安排。
+- [资料与校验记录](examples/jev/资料与校验.md)：官方来源、采用范围和实际修订。
+- [示例使用说明](examples/润色示例.md)：写作任务与复现方式。
+
+正文依据公开文档编写；其中演示数字均有说明，不包含模型 API 实测或性能排名。
 
 ## 工作流程
 
@@ -114,7 +130,11 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 expression_skill/
 ├── README.md
 ├── examples/
-│   └── 润色示例.md
+│   ├── 润色示例.md
+│   └── jev/
+│       ├── 大纲.md
+│       ├── 资料与校验.md
+│       └── 技术分享.md
 └── skills/
     └── chinese-expression/
         ├── SKILL.md
