@@ -1,0 +1,4 @@
+interface:
+  display_name: "语言表达"
+  short_description: "围绕核心想法，在同一文档上分阶段写作与润色，回读校验逐句逻辑"
+  default_prompt: "请使用 $chinese-expression，根据我的核心想法和材料，在同一份文档上分阶段写作或润色，按需补充依据，保存后回读校验并修正，保留原意与表达风格。"
