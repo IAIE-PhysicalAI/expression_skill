@@ -1,0 +1,82 @@
+[
+  {
+    "file": "sources/01.txt",
+    "url": "https://docs.typesafe.ai/introduction.md",
+    "raw_sha256": "f1dbcd1857df8903bdfdbab4acba8aca88f9711d399dea1f6588c8a7a34ea926",
+    "input_sha256": "58496b5020dd5a233fd42691f9d2d8fb0e53112bf26584bc9338bea88aa7abe9",
+    "bytes": 4743,
+    "fetched_at": "2026-10-18T02:59:06.080799+00:00"
+  },
+  {
+    "file": "sources/02.txt",
+    "url": "https://docs.typesafe.ai/concepts/system-one.md",
+    "raw_sha256": "f3ef88c39b3e6a52db708bef199a8d72be5d4f1ae3b58e256d1fae141f1836c2",
+    "input_sha256": "e575bd0f11ea36e1c96d56aae6eb8f7ffc32deaca123bbba87432fb761b0ca54",
+    "bytes": 3992,
+    "fetched_at": "2026-10-18T02:59:06.162600+00:00"
+  },
+  {
+    "file": "sources/03.txt",
+    "url": "https://docs.typesafe.ai/primitives/choice.md",
+    "raw_sha256": "ae9c49b815ee30b28ed851e22b63041130fba50ae41368d41a5d80b571f383bb",
+    "input_sha256": "c804ffbf09c61847308d51112e91ffadd3c306ad7adbe7a280d5219ea9b608d2",
+    "bytes": 18166,
+    "fetched_at": "2026-10-18T02:59:06.165700+00:00"
+  },
+  {
+    "file": "sources/04.txt",
+    "url": "https://docs.typesafe.ai/primitives/score.md",
+    "raw_sha256": "a0a39b9c01f5ac3616efae071bf23f879bbe3fb12b0af2169932dbb71dd83d32",
+    "input_sha256": "1e869ad67242a435ce536251a4bf704f1fc55dc2092a5e2a0c2351d25faaa572",
+    "bytes": 22578,
+    "fetched_at": "2026-10-18T02:59:06.196666+00:00"
+  },
+  {
+    "file": "sources/05.txt",
+    "url": "https://docs.typesafe.ai/primitives/noul.md",
+    "raw_sha256": "bf5d8c6700fbd9272ce27b53a6439d598e7915cdf505704ac7c827c6175ecb88",
+    "input_sha256": "b93d2b006e71710b6036d854ea6d75f5d4999f7047eaf8dcdd3d5ee77d2e7809",
+    "bytes": 17755,
+    "fetched_at": "2026-10-18T02:59:06.392555+00:00"
+  },
+  {
+    "file": "sources/06.txt",
+    "url": "https://docs.typesafe.ai/confidence.md",
+    "raw_sha256": "5c325ec0c0b69e78129406ca7c5d3aef113bce365abd34985b8674cd278c81be",
+    "input_sha256": "ec914c3867b789d2ac3911513f8a826e141aad6bd0c825e4aaeeac5196b99835",
+    "bytes": 9832,
+    "fetched_at": "2026-10-18T02:59:06.673618+00:00"
+  },
+  {
+    "file": "sources/07.txt",
+    "url": "https://docs.typesafe.ai/introduction/machine-learning-primer.md",
+    "raw_sha256": "62f4354cfcdc00c5ec3e4865bc6b6a79900042c26c3afea0e67d88537e980121",
+    "input_sha256": "6c48fc69e31f5010f3a3da5b0f19f5439f5988cfe7c2c613d11066909e1a3d9d",
+    "bytes": 6769,
+    "fetched_at": "2026-10-18T02:59:06.746098+00:00"
+  },
+  {
+    "file": "sources/08.txt",
+    "url": "https://developers.openai.com/api/docs/guides/structured-outputs/",
+    "raw_sha256": "1125cf85594999e1e3373b515464ecdabf10c2fd842f53d1c0308c5620d7b108",
+    "input_sha256": "bef1c5acd8f15c7d52d125ef978c0cfce92d4d0dbcd11dd8c3d172dfa73de4a5",
+    "bytes": 305598,
+    "fetched_at": "2026-10-18T02:59:08.854174+00:00"
+  },
+  {
+    "file": "sources/09.txt",
+    "url": "https://developers.openai.com/api/docs/guides/reasoning/",
+    "raw_sha256": "7892d4084d9591f05f711f7153f2e4b7cbe1b47a260c1f37ed311899a95e82b2",
+    "input_sha256": "9afa81b4b6989a8c0a5a33a3d919cb239eb5457f001e6a434631bf84810db72f",
+    "bytes": 84119,
+    "fetched_at": "2026-10-18T02:59:09.451441+00:00"
+  },
+  {
+    "file": "sources/10.txt",
+    "url": "https://scikit-learn.org/stable/modules/calibration.html",
+    "raw_sha256": "00860ac6c19e425758b76adf27721d343ad3d5cbc72f865da7a9fe1aa32b9864",
+    "input_sha256": "b8b5cedb3afd63e3a1ed2852c65b6a1c57c39fcc7d5026e1aace08f7ec1ecc4d",
+    "bytes": 16875,
+    "fetched_at": "2026-10-18T02:59:07.468155+00:00"
+  }
+]
