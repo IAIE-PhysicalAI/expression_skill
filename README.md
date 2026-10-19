@@ -36,13 +36,15 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 
 ### 手动下载
 
-从 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) 下载 `chinese-expression.zip`，解压后将整个 `chinese-expression` 文件夹放入目标 agent 的技能目录，保留其中的 `SKILL.md` 和 `agents/`。
+从 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) 下载 `chinese-expression.zip`，解压后将整个 `chinese-expression` 文件夹放入目标 agent 的技能目录。分阶段版本需要完整保留 `SKILL.md`、`references/`、`scripts/` 和 `agents/`，不能只复制入口文件。尚未发布的新版本以对应分支源码为准，旧发布包不自动包含新增功能。
 
 也可以点击 GitHub 的 **Code → Download ZIP** 下载仓库，技能位于 `skills/chinese-expression/`。不同工具的技能目录和刷新方式可能不同，请以对应工具的说明为准。
 
 ## 使用
 
 安装后，在支持技能调用的 agent 中指定 `chinese-expression`。Codex 中可以使用 `$chinese-expression`；其他工具按各自的技能调用方式使用。
+
+**默认使用通用模式。** Agent 按阶段读取职责，在同一份工作文档上完成准备、补充信息、内容编辑、独立验收和风格调整。严格模式是额外的程序化执行选项，只有用户明确要求独立上下文、程序控制或严格复验时才启用，不作为普通写作任务的默认入口。
 
 ### 润色已有文档
 
@@ -98,12 +100,34 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 | 准备 | 一至三步合并 | 确认核心问题，理解已有材料，保存具有层级和详略安排的大纲 |
 | 补充信息 | 第四步独立 | 根据大纲中的重点观点再次检索与核实，记录依据、出处和缺口 |
 | 内容成稿 | 第五步独立 | 确定每段核心，选择并组织信息，写入同一份工作文档 |
-| 校验与修复 | 第六步独立 | 回读已保存正文，逐句检查逻辑与支撑，定向回退并复查 |
+| 校验与修复 | 第六步独立 | 先检查组织，下一轮检查逐句支撑；验收只报问题，回退到对应编辑阶段修复 |
 | 个性化风格 | 第七步独立 | 调整作者特有的语气、节奏和表达方式，保存并复查 |
 
 大纲明确同级标题的并列关系、子标题的从属关系，并标出需要详细介绍的内容。后续改变结构或重点时，大纲也要同步更新。
 
 每轮修改针对具体问题。依据不足就补充材料，核心信息孤立就补足解释与关联，句间推理不成立就重新组织。已符合要求的内容保留，不为增加轮次而强行修改。
+
+入口只保留阶段导航；详细职责放在 [references](skills/chinese-expression/references/阶段交接.md)，进入哪一阶段就读取哪份指令。全程表达原则共享，保存、回读、回退与复查集中到一份交接规则，不在每个步骤反复叠加。
+
+任务目标用于理解文章方向，不转成固定观点、切入点、必写内容或评分表。验收仍采用技能已有的组织、解释、逻辑、支撑、事实与原意等判断条目，允许不同但成立的表达方案。
+
+### 可选：严格执行模式
+
+通用模式依赖 agent 遵循指令；需要独立上下文和程序控制时，使用随技能附带的调度器。需要 Python 3.11+ 和已配置的 Codex CLI：
+
+```bash
+python3 skills/chinese-expression/scripts/strict.py \
+  --document ./技术分享.md \
+  --task ./任务.txt \
+  --material ./资料.md \
+  --work-dir ./技术分享.expression-run
+```
+
+该命令在同一正文上修改并备份初稿；若不希望改动原件，先建立工作副本。每轮独立调用模型，调度器仅发送共享原则、本轮职责与必要材料；编辑者提交候选文本替换，验收者只返回问题。阶段权限、输入版本、回退顺序和修复上限由程序检查。
+
+固定执行准备、补充信息、内容编辑、组织验收、支撑验收、风格调整，再分别复查组织与支撑。验收问题会触发对应步骤的修复；缺材料或达到上限时暂停，不把未完成状态报成通过。没有问题可不修改。
+
+运行记录保存在指定目录，包含初稿备份、逐轮 diff、问题与阶段状态。可加 `--resume` 恢复；输入改变时旧验收失效。完整参数、状态及适配器协议见[严格模式说明](skills/chinese-expression/references/严格模式.md)。严格模式调用模型会产生相应额度消耗；当前只处理 UTF-8 文本与已提供资料，不自动外部检索。
 
 ## 中文表达规则
 
@@ -122,7 +146,7 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 
 完整执行需要 agent 能读写文档；开放式写作和外部核验还需要搜索、读取来源的能力。技能本身不附带搜索服务、模型或文档编辑软件。仅有聊天输出的环境可以参考表达规则，但无法完整执行文件保存与回读流程。
 
-格式兼容不等于各模型执行效果相同。分阶段修改依赖 agent 遵循指令，本仓库不包含强制调度各阶段的运行程序。涉及事实的最终稿仍需结合原始来源审阅。
+格式兼容不等于各模型执行效果相同。严格模式约束的是调用与写回流程，语义判断仍依赖模型，不保证检查零遗漏，也不限制文章只能采用一种观点。默认适配器使用只读环境与受限工具入口；调度器不是防御恶意本机进程的通用安全沙箱。涉及事实的最终稿仍需结合原始来源审阅。
 
 ## 文件与更新
 
@@ -142,6 +166,11 @@ expression_skill/
     └── chinese-expression/
         ├── SKILL.md
         ├── LICENSE
+        ├── references/
+        │   └── 分阶段职责与统一交接规则
+        ├── scripts/
+        │   ├── strict.py
+        │   └── codex_adapter.py
         └── agents/
             └── openai.yaml
 ```
@@ -153,6 +182,8 @@ expression_skill/
 ## 反馈与改进
 
 欢迎通过 [Issues](https://github.com/IAIE-PhysicalAI/expression_skill/issues) 提交实际使用中遇到的问题。建议附上技能版本、使用的 agent、脱敏后的输入与输出，以及期望改善的具体地方。
+
+当前分阶段版本仍在灰度测试，不替代 `main` 上的已发布版本。参与测试请从 `feature/staged-instructions-strict-mode` 分支获取完整技能目录，并按[灰度测试指南](GRAY_TEST.md)记录任务、结果和问题；普通测试优先使用通用模式。
 
 规则调整优先解决可复现的问题，并保持流程清楚、篇幅适当。
 
