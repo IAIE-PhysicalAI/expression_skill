@@ -8,6 +8,8 @@
 
 当前示例与使用指南围绕模型介绍、技术机制解释和方案比较展开。技能主体、规则和使用提示均为中文，技术标识为 `chinese-expression`。
 
+当前正式版为 **v1.1.0**，已完成灰度测试，采用分阶段读取职责的通用模式。完整规则由入口文件与 8 份配套指令组成，详见[更新记录](CHANGELOG.md)。
+
 [阅读完整技能](skills/chinese-expression/SKILL.md) · [下载发布包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
 
 ## 安装
@@ -36,7 +38,9 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 
 ### 手动下载
 
-从 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) 下载 `chinese-expression.zip`，解压后将整个 `chinese-expression` 文件夹放入目标 agent 的技能目录。分阶段版本需要完整保留 `SKILL.md`、`references/`、`scripts/` 和 `agents/`，不能只复制入口文件。尚未发布的新版本以对应分支源码为准，旧发布包不自动包含新增功能。
+从 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) 下载 `chinese-expression.zip`，解压后将整个 `chinese-expression` 文件夹放入目标 agent 的技能目录。完整保留 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`，不能只复制入口文件。附件 `SHA256SUMS.txt` 可用于核对下载包。
+
+更新已有安装时，先备份自己的定制内容，再用新包替换整个技能目录。曾安装带严格模式的预览版时也采用整目录替换，避免遗留旧脚本或说明。v1.1.0 仅包含通用模式，使用它无需 Python 或独立调度器。
 
 也可以点击 GitHub 的 **Code → Download ZIP** 下载仓库，技能位于 `skills/chinese-expression/`。不同工具的技能目录和刷新方式可能不同，请以对应工具的说明为准。
 
@@ -44,7 +48,7 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 
 安装后，在支持技能调用的 agent 中指定 `chinese-expression`。Codex 中可以使用 `$chinese-expression`；其他工具按各自的技能调用方式使用。
 
-**默认使用通用模式。** Agent 按阶段读取职责，在同一份工作文档上完成准备、补充信息、内容编辑、独立验收和风格调整。严格模式是额外的程序化执行选项，只有用户明确要求独立上下文、程序控制或严格复验时才启用，不作为普通写作任务的默认入口。
+Agent 按阶段读取职责，在同一份工作文档上完成准备、补充信息、内容编辑、组织与逐句支撑验收、个性化风格调整。每个验收轮先读取职责，再重新读取已保存正文；修复后进入对应验收轮复查。
 
 ### 润色已有文档
 
@@ -80,16 +84,15 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 
 提供原稿、目标读者、核心想法、材料边界和风格参考，有助于 agent 判断重点与详略。
 
-## 第一期示例：Jev 技术分享
+## 实际示例：Jev 技术分享
 
-围绕“Jev 与其他模型有什么区别”，用 **Git diff 展示同一份文档润色前后的真实变化**：先由未加载本技能的独立会话生成初稿，再由另一会话使用技能分阶段原地修改。初稿不经过人工降质，正文不由发布者二次改写。
+通过 **Git diff 展示同一份文档润色前后的真实变化**：初稿来自未加载本技能的独立会话，修订会话读取对应技能版本后原地修改。正文按实际运行结果保留。
 
-- **[查看润色对比](examples/润色示例.md)**：GitHub 红绿差异、初稿来源和结果边界。
-- [下载原始 diff](examples/jev/润色对比.diff)：由两个提交直接生成，可在本地校验。
-- [实验条件与复现](examples/jev/实验说明.md)：实际提示词、相同资料的哈希、运行配置和操作记录。
-- [大纲](examples/jev/大纲.md)与[资料及校验记录](examples/jev/资料与校验.md)：查看分阶段编辑如何落实。
+- **[示例入口](examples/润色示例.md)**：按技能版本查看前后差异。
+- [v1.1.0：Jev 与 Mobile GUI Agent 调研](examples/jev-mobile-v1.1/实验说明.md)：从此前无技能初稿出发，使用本次正式版规则润色；附大纲、实际操作记录和 diff。
+- [旧版：Jev 与其他模型的比较](examples/jev/实验说明.md)：保留 2026-10-18 的原始运行、已知遗漏和对应版本，方便追溯。
 
-这是单次使用示例，不是技能提升效果的严格证明；额外编辑机会也会影响结果。两次执行使用相同资料，不包含 Jev API 实测或性能排名。旧版单篇正文展示保留在 Git 历史中。
+各示例使用固定资料，展示信息组织与润色行为，不包含 Jev API 实测。额外编辑机会、模型与运行时间会影响结果，单例不能证明技能带来稳定提升。具体材料范围与尚存问题见各例说明。
 
 ## 工作流程
 
@@ -111,23 +114,7 @@ npx skills add IAIE-PhysicalAI/expression_skill --list
 
 任务目标用于理解文章方向，不转成固定观点、切入点、必写内容或评分表。验收仍采用技能已有的组织、解释、逻辑、支撑、事实与原意等判断条目，允许不同但成立的表达方案。
 
-### 可选：严格执行模式
-
-通用模式依赖 agent 遵循指令；需要独立上下文和程序控制时，使用随技能附带的调度器。需要 Python 3.11+ 和已配置的 Codex CLI：
-
-```bash
-python3 skills/chinese-expression/scripts/strict.py \
-  --document ./技术分享.md \
-  --task ./任务.txt \
-  --material ./资料.md \
-  --work-dir ./技术分享.expression-run
-```
-
-该命令在同一正文上修改并备份初稿；若不希望改动原件，先建立工作副本。每轮独立调用模型，调度器仅发送共享原则、本轮职责与必要材料；编辑者提交候选文本替换，验收者只返回问题。阶段权限、输入版本、回退顺序和修复上限由程序检查。
-
-固定执行准备、补充信息、内容编辑、组织验收、支撑验收、风格调整，再分别复查组织与支撑。验收问题会触发对应步骤的修复；缺材料或达到上限时暂停，不把未完成状态报成通过。没有问题可不修改。
-
-运行记录保存在指定目录，包含初稿备份、逐轮 diff、问题与阶段状态。可加 `--resume` 恢复；输入改变时旧验收失效。完整参数、状态及适配器协议见[严格模式说明](skills/chinese-expression/references/严格模式.md)。严格模式调用模型会产生相应额度消耗；当前只处理 UTF-8 文本与已提供资料，不自动外部检索。
+第六步也检查“不是……而是……”“并非……”等正反表达：保留理解所必需的区分与证据边界，将可直接表达的观点改为正面陈述，处理重复防备与虚设反方。此项随逐句验收执行，不设句式数量阈值。
 
 ## 中文表达规则
 
@@ -146,31 +133,25 @@ python3 skills/chinese-expression/scripts/strict.py \
 
 完整执行需要 agent 能读写文档；开放式写作和外部核验还需要搜索、读取来源的能力。技能本身不附带搜索服务、模型或文档编辑软件。仅有聊天输出的环境可以参考表达规则，但无法完整执行文件保存与回读流程。
 
-格式兼容不等于各模型执行效果相同。严格模式约束的是调用与写回流程，语义判断仍依赖模型，不保证检查零遗漏，也不限制文章只能采用一种观点。默认适配器使用只读环境与受限工具入口；调度器不是防御恶意本机进程的通用安全沙箱。涉及事实的最终稿仍需结合原始来源审阅。
+通用模式依赖 agent 遵循阶段职责、重新读取文件并作判断；同一会话仍保留先前上下文。格式校验通过或完成流程不代表内容没有遗漏，涉及事实的最终稿仍需结合原始来源审阅。
 
 ## 文件与更新
 
 ```text
 expression_skill/
 ├── README.md
+├── CHANGELOG.md
+├── GRAY_TEST.md
 ├── examples/
 │   ├── 润色示例.md
-│   └── jev/
-│       ├── 润色对比.diff
-│       ├── 实验说明.md
-│       ├── 实验/
-│       ├── 大纲.md
-│       ├── 资料与校验.md
-│       └── 技术分享.md
+│   ├── jev/                  旧版示例及原始记录
+│   └── jev-mobile-v1.1/      正式版示例及原始记录
 └── skills/
     └── chinese-expression/
         ├── SKILL.md
         ├── LICENSE
         ├── references/
         │   └── 分阶段职责与统一交接规则
-        ├── scripts/
-        │   ├── strict.py
-        │   └── codex_adapter.py
         └── agents/
             └── openai.yaml
 ```
@@ -183,7 +164,7 @@ expression_skill/
 
 欢迎通过 [Issues](https://github.com/IAIE-PhysicalAI/expression_skill/issues) 提交实际使用中遇到的问题。建议附上技能版本、使用的 agent、脱敏后的输入与输出，以及期望改善的具体地方。
 
-当前分阶段版本仍在灰度测试，不替代 `main` 上的已发布版本。参与测试请从 `feature/staged-instructions-strict-mode` 分支获取完整技能目录，并按[灰度测试指南](GRAY_TEST.md)记录任务、结果和问题；普通测试优先使用通用模式。
+v1.1.0 已完成灰度测试并纳入 `main`。后续问题仍可按[使用测试与反馈指南](GRAY_TEST.md)记录任务、结果和具体缺口。
 
 规则调整优先解决可复现的问题，并保持流程清楚、篇幅适当。
 

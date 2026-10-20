@@ -1,27 +1,27 @@
-# 新版语言表达 Skill 灰度测试指南
+# 语言表达 Skill 使用测试与反馈指南
 
-本轮优先测试**新版通用模式**。它在一个正常的 Agent 会话中按阶段读取配套职责，在同一份正文上持续修改；严格模式只作为可选对照，不是默认测试入口。
+v1.1.0 已完成灰度测试并正式发布，使用通用模式：在正常的 Agent 会话中按阶段读取配套职责，在同一份正文上持续修改。本指南保留原文件路径，供后续测试和问题反馈使用。
 
-当前测试版本位于 `feature/staged-instructions-strict-mode` 分支，不替代 `main` 上的已发布版本。测试时请完整安装 `chinese-expression` 文件夹，保留其中的 `SKILL.md`、`references/`、`scripts/` 和 `agents/`。
+请完整安装 `chinese-expression` 文件夹，保留其中的 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`。
 
-## 安装测试分支
+## 获取正式版
 
-可以下载测试分支源码：
+正式发布包：
 
 ```text
-https://github.com/IAIE-PhysicalAI/expression_skill/archive/refs/heads/feature/staged-instructions-strict-mode.zip
+https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest
 ```
 
-解压后，将 `skills/chinese-expression/` 整个文件夹复制到所用 Agent 的技能目录。不要覆盖正在使用的稳定版；建议安装到独立测试环境，或先备份原目录。
+下载 `chinese-expression.zip`，解压后将整个 `chinese-expression/` 文件夹放到 Agent 的技能目录。更新前备份已有定制内容，再用完整新目录替换旧目录。
 
-如果收到单独的灰度测试压缩包，解压后直接使用其中的 `chinese-expression/` 文件夹。仓库提交号或压缩包文件名用于标识本次测试版本。
+记录 Release 标签或仓库提交号，以便复现。旧灰度包代表当时的预览版本，不能当作最新正式版。
 
 ## 默认测试方式
 
-正常调用技能，不要求运行严格调度器：
+正常调用技能：
 
 ```text
-请使用 $chinese-expression 完成这项中文写作任务，使用通用模式，不运行严格调度器。
+请使用 $chinese-expression 完成这项中文写作任务。
 
 任务：<写作或润色要求>
 目标读者：<读者背景与用途>
@@ -36,13 +36,13 @@ https://github.com/IAIE-PhysicalAI/expression_skill/archive/refs/heads/feature/s
 - 已有文档的结构与表达润色；
 - 需要核对论据、条件和结论边界的调研总结。
 
-观察 Agent 是否实际保存大纲，是否按需读取阶段指令，是否在同一份正文上修改，是否把组织验收与逐句支撑验收分开。阶段没有发现问题时可以直接通过，不以修改次数评价执行质量。
+观察 Agent 是否实际保存大纲，是否按需读取阶段指令，是否在同一份正文上修改，是否在组织验收与逐句支撑验收开始后分别重新读取当前正文。阶段没有发现问题时可以直接通过，不以修改次数评价执行质量。
 
 ## 建议的对照方式
 
 有条件时，对同一任务分别运行一次“不使用 skill”和一次“新版通用模式”。两次应使用相同模型、材料、任务要求和可用工具，并分别从空白会话开始。不要把第一份文章交给第二组继续润色，除非测试目标本身就是润色已有文档。
 
-严格模式可以另做对照，但需要 Python 3.11+ 和已配置的 Codex CLI，调用次数与资源消耗也不同。它的结果不能直接归因于提示词本身。运行方法见 `references/严格模式.md`。
+记录实际编辑机会、工具权限与耗时等差异。若测试润色效果，可为同一初稿分别安排使用与不使用技能的修订，比较具体改善与新增问题。
 
 ## 重点检查
 
@@ -65,7 +65,7 @@ https://github.com/IAIE-PhysicalAI/expression_skill/archive/refs/heads/feature/s
 ### 环境
 - 测试版本／提交号：
 - Agent 与模型：
-- 通用模式或严格模式：
+- 可用工具与材料范围：
 
 ### 任务
 - 任务类型：新写作／固定材料成稿／润色

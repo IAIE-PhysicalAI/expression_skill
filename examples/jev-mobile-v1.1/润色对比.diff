@@ -1,0 +1,84 @@
+diff --git a/examples/jev-mobile-v1.1/技术分享.md b/examples/jev-mobile-v1.1/技术分享.md
+index 119e898..81cd1cd 100644
+--- a/examples/jev-mobile-v1.1/技术分享.md
++++ b/examples/jev-mobile-v1.1/技术分享.md
+@@ -2,52 +2,52 @@
+ 
+ > 调研截止：2026-10-19；面向具有 GUI Agent 背景的研发同事。
+ 
+-## 1. 范围与结论先行
++## 1. 范围与结论
+ 
+-Jev 是一种 typed decision model（TDM）：调用方给出状态、问题和有限候选，模型直接返回候选概率与结构化答案，不生成自由文本。厂商接口包括 Choice、Score、Noul，并强调同一状态上的多个问题可并行、隔离求值（[产品说明](https://docs.typesafe.ai/introduction.md)，[Choice 接口](https://docs.typesafe.ai/primitives/choice.md)）。它与 mobile GUI Agent 的契合点，是每一步通常都可表述为“在当前 UI 状态和有限动作集中选一个动作”。
++Jev 属于 typed decision model（TDM）：调用方提供状态、问题和有限候选，模型返回结构化选择及候选概率，不生成自由文本。厂商提供 Choice、Score、Noul 三类接口，并支持对同一状态的多个问题并行、隔离求值（[产品说明](https://docs.typesafe.ai/introduction.md)，[Choice 接口](https://docs.typesafe.ai/primitives/choice.md)）。这与 mobile GUI Agent 中“根据当前 UI 状态，从有限动作中选择下一步”的高频环节较为契合。
+ 
+-但截至本次资料截止日，**直接研究 Jev 在 mobile GUI Agent 中应用的论文证据很少**：资料包中核心工作只有 [Jev-Mobile](https://arxiv.org/abs/2609.30186v1) 与 [When Faster Decisions Do Not Make Better Agents](https://arxiv.org/abs/2610.13092v1) 两篇，且均为 2026 年 9—10 月的新预印本。前者证明“低频 VLM 规划 + 高频 Jev 执行”可显著降时延和费用；后者通过更广泛的系统对照说明，局部决策变快并不保证任务成功或单位成功成本改善。因而当前最稳妥的判断是：**Jev 已显示为移动 GUI 的可用轻量执行器，但尚不能被视为通用替代 VLM 的成熟策略模型；候选覆盖、恢复和完成验证决定了效率能否兑现。**
++资料包所列定向检索并非穷尽检索。在其范围内，直接研究 Jev 与 mobile GUI Agent 的核心论文主要是 [Jev-Mobile](https://arxiv.org/abs/2609.30186v1) 和 [When Faster Decisions Do Not Make Better Agents](https://arxiv.org/abs/2610.13092v1)，且均为 2026 年 9—10 月的预印本。现有证据支持的结论是：Jev 可以成为受约束的快速执行层，但尚不足以替代 VLM 承担开放式规划、视觉定位和复杂恢复。局部决策更快、更便宜，能否转化为端到端收益，取决于候选覆盖、工作流开销、恢复能力和终态验证。
+ 
+ ## 2. 研究思路分类
+ 
+-| 思路 | Jev 所处角色 | 代表工作 | 当前证据 |
+-|---|---|---|---|
+-| 分层委派执行 | VLM 定局部目标，Jev 连续选原子动作 | Jev-Mobile | 直接 mobile GUI 证据，效率突出、成功率略降 |
+-| 原工作流内替换 | 用 Jev 替换现有 agent 的动作选择模块 | Faster Decisions | 直接、多 agent 对照；收益高度依赖工作流 |
+-| 视觉共享决策 | 一次编码截图，多问题批量判断 | Visual Jev | 与 GUI 感知高度相关，但非 mobile agent 端到端验证 |
+-| 端侧专用决策 | 小型 encoder、本地推理、语言/领域适配 | Chinese-Jev | 证明端侧可行性，未验证 GUI 控制 |
+-| 自适应动作空间与恢复 | 动态构造有限字段、分支搜索、反馈修订 | JevSpawn 等 | 通用 agent/RL 证据，可作为移动 GUI 后续设计参考 |
++| 思路 | Jev 的角色 | 证据性质 |
++| --- | --- | --- |
++| 分层委派 | VLM 设局部目标，Jev 连续选择原子动作 | 直接 mobile GUI 实验 |
++| 模块替换 | 替换既有 Agent 的动作选择器 | 直接、多工作流对照 |
++| 视觉共享决策 | 共享截图编码，批量回答多个有限选择问题 | 机制相关，未做 mobile 端到端验证 |
++| 端侧专用决策 | 小型 encoder 在设备侧完成候选评分 | 端侧可行性，非 GUI 控制证据 |
++| 动态动作空间与恢复 | 组合候选、分支探索并按反馈修订 | 通用 Agent 证据 |
+ 
+-### 2.1 低频规划、高频结构化执行
++### 2.1 分层委派：低频规划、高频执行
+ 
+-[Jev-Mobile](https://arxiv.org/abs/2609.30186v1) 将任务理解与动作执行拆开：通用 VLM 读取截图、无障碍树和历史，生成局部目标及精确输入文本；程序从当前 accessibility tree 枚举可执行候选；Jev 在候选 ID、`DONE`、`BLOCKED` 中反复选择。每次动作后重新观察并重建候选，避免旧坐标或旧 ID 静默绑定到新页面。VLM 因此可用一次规划覆盖多步 GUI 操作。
++[Jev-Mobile](https://arxiv.org/abs/2609.30186v1) 将系统拆成三层：VLM 读取任务、截图、accessibility tree 与历史，给出局部目标和精确输入文本；程序从当前树生成可执行候选；Jev 在候选 ID、`DONE`、`BLOCKED` 中反复选择。每次动作后都重新观察并生成候选，旧 ID 随即失效。一次 VLM 规划因此可以覆盖多步 GUI 操作，同时由程序约束动作的可执行性。
+ 
+-在完整 AndroidWorld 上，该系统成功率为 79%，接近 SeeAct-V 的 78%，低于逐步 VLM 的 84%。仅在成功轨迹上统计时，平均总耗时为 132.67 秒，相比逐步 VLM 降低 32.7%；全模型 API 平均成本由 0.273694 美元降至 0.072744 美元，降低 73.4%；执行模型时间从 94.30 秒降至 5.16 秒。这里真正有效的不是单纯“小模型替大模型”，而是三层约束：VLM 缩小语义范围、程序保证动作可执行、Jev 只做当前状态下的有界选择。
++在完整 AndroidWorld 任务集上，Jev-Mobile 的成功率为 79%，SeeAct-V 为 78%，逐步 VLM 为 84%。除成功率外，该论文的时间和成本指标只统计成功轨迹：Jev-Mobile 平均总耗时 132.67 秒，比逐步 VLM 低 32.7%；平均全模型 API 成本为 0.072744 美元，低 73.4%；执行模型时间从 94.30 秒降至 5.16 秒。在该实验设置与统计口径下，完整系统显示出效率优势；但论文没有在同一委派框架下用小 VLM 替换 Jev，无法据此单独判断 Jev 是否优于其他轻量选择器。
+ 
+-局限同样清晰：accessibility tree 缺失的纯视觉目标无法进入候选集；长而嘈杂的树会增加选择难度；当前输入链路不支持部分非 ASCII 文本；`DONE` 仅表示局部交接，不等于任务完成。该论文也未设置“同一分层框架下用小 VLM 替换 Jev”的控制组，因此无法完全分离 Jev 模型与委派架构本身的贡献。
++这一路线的瓶颈首先是候选覆盖：accessibility tree 中不存在的纯视觉目标无法执行，长而嘈杂的树也会增加选择难度。其次，`DONE` 只表示局部控制权交还 VLM，并不等于任务完成；当前输入链路还不支持部分非 ASCII 文本。Jev 在这里是远程决策服务，“局部”指决策范围，并非端侧推理。
+ 
+-### 2.2 在既有 Agent 中替换动作选择器
++### 2.2 模块替换：局部节省如何传到任务层
+ 
+-[Faster Decisions](https://arxiv.org/abs/2610.13092v1) 把 Jev 接入 AndroidWorld 的 T3A、AutoDroid、FastAgent，以及 ALFWorld 的 ReAct、Reflexion，共进行 4,500 次执行。所有五个 agent 的单次决策成本下降 66.1%—78.4%，决策时间下降 73.9%—81.5%；但 AndroidWorld 上 Jev 版本相对原版成功率分别下降 13.22、2.30、18.10 个百分点。T3A 虽然单次尝试成本下降 17.1%，按全部失败开销折算后，单位成功成本反而从 68.70 mUSD 升至 73.97 mUSD；FastAgent 的单位成功时间从 239.4 秒升至 377.8 秒。
++[When Faster Decisions Do Not Make Better Agents](https://arxiv.org/abs/2610.13092v1) 将 Jev 接入 AndroidWorld 的 T3A、AutoDroid、FastAgent，以及 ALFWorld 的 ReAct、Reflexion，共执行 4,500 次。五个 Agent 家族的单次决策成本下降 66.1%—78.4%，决策时间下降 73.9%—81.5%；但三个移动 Agent 的成功率相对原配置分别下降 13.22、2.30 和 18.10 个百分点。
+ 
+-这组结果揭示了三类“效率传导损失”：一是辅助 LLM 推理、环境等待和额外交互吞掉选择器节省；二是一步一个工具等接口变化拉长轨迹；三是目标识别错误、前置条件违反、无效搜索、恢复失败和过早完成降低交付率。尤其在移动端，短任务也会因选错语义含混的开关后直接宣告完成而失败。因此评测不应只看 per-decision latency 或成功轨迹均值，还应同时报告全任务成功率、失败开销、匹配成功样本，以及 cost/time per delivered success。
++因此，per-decision latency 不能代表交付效率。辅助 LLM 调用、环境等待和额外交互会吸收节省；接口粒度变化还可能拉长轨迹。T3A 的每次尝试成本虽下降 17.1%，计入失败尝试后，单位成功成本反而从 68.70 mUSD 升至 73.97 mUSD；FastAgent 的单位成功时间从 239.4 秒升至 377.8 秒。轨迹分析还指向目标识别、前置条件、无效搜索、恢复失败和过早完成等问题。相关行为频次来自论文筛选的结果组，不宜外推为所有 mobile GUI 任务的普遍分布。
+ 
+-### 2.3 视觉、端侧与自适应决策：有潜力但尚非直接证据
++### 2.3 可迁移方向：视觉、端侧与动态候选
+ 
+-[Visual Jev](https://arxiv.org/abs/2609.25845v1) 面向“同一图像上的多项独立选择”：共享图像前缀，批量执行隔离的问题后缀。在每图 32 个问题时，其温启动摊销速度比串行执行快 8.9 倍、比重复前缀的批处理快 3.4 倍，但峰值显存更高；训练后宏平均准确率由 70.6% 升至 76.1%，增益集中于训练覆盖的任务族。它适合未来把“目标定位、页面状态、完成条件、风险判断”作为并行 GUI 判定，但资料没有端到端 mobile GUI 结果。厂商图像与 Box 接口仍标为试验性质（[图像文档](https://docs.typesafe.ai/images.md)），不宜视为生产级 grounding 结论。
++[Visual Jev](https://arxiv.org/abs/2609.25845v1) 共享同一图像的视觉前缀，并批量执行彼此隔离的问题后缀。每图 32 个问题时，其温启动摊销速度比串行执行快 8.9 倍、比重复前缀的批处理快 3.4 倍，但峰值显存更高。这可用于并行判断目标、页面状态和完成条件，不过论文没有 mobile GUI 端到端结果，厂商的图像与 Box 接口也仍标为试验功能（[图像文档](https://docs.typesafe.ai/images.md)）。
+ 
+-[Chinese-Jev](https://arxiv.org/abs/2609.36965v1) 以轻量 encoder 做中文候选评分，INT8 手机端约 1 秒/决策，说明隐私敏感、离线 mobile agent 的本地决策层具备工程可能；但其评测是通用及医法财决策，不是 UI 状态理解或动作执行。[JevSpawn](https://arxiv.org/abs/2610.00437v1) 则动态组合动作字段，以并行分支、反馈选择、表示修订和保留备选支持恢复，回应了“Jev 需要预先给定有限候选”的核心限制；不过资料中的八项 benchmark 并未建立 mobile GUI 专项结论。[Jev in RL](https://arxiv.org/abs/2610.11692v1) 将 Jev 用作参考策略、探索判断器和 replay 评分器，为训练 GUI policy 提供了另一条路线，但实验仅覆盖 MiniGrid 与 Atari。
++[Chinese-Jev](https://arxiv.org/abs/2609.36965v1) 的 INT8 模型在手机端约 1 秒完成一次决策，说明本地候选评分具有工程可能；其任务是通用及医法财中文决策，不能据此推断 GUI 控制能力。[JevSpawn](https://arxiv.org/abs/2610.00437v1) 用组合动作字段、并行分支、反馈修订和保留备选来缓解“候选必须预先给定”的限制；[Jev in RL](https://arxiv.org/abs/2610.11692v1) 则把 Jev 用作参考策略、探索判断器和 replay 评分器。两者均未在 mobile GUI 上完成专项验证。
+ 
+-## 3. 与主流 Mobile GUI 路线的关系
++## 3. 与 Mobile GUI 邻近路线的关系
+ 
+-Jev 路线并非孤立的新范式，而是“生成式全能 agent”之外的结构化判别路线。最接近的非 Jev 对照是 [V-Droid](https://arxiv.org/abs/2503.15937v5)：它离散化动作空间，用 LLM verifier 对候选动作做 pair-wise progress 判断，AndroidWorld 成功率 59.5%，每步 4.3 秒。两者共同表明“候选生成 + 判别选择”可以替代逐步自由生成；差异在于 V-Droid 通过偏好训练强化 verifier，而 Jev-Mobile 依赖通用 typed decision 服务与显式交接。
++最接近的非 Jev 路线是 [V-Droid](https://arxiv.org/abs/2503.15937v5)：它同样离散化动作空间，但用经过偏好训练的 LLM verifier 评价候选；Jev-Mobile 则使用通用 typed decision 服务并显式交接控制权。二者说明“候选生成 + 判别选择”是一条独立于逐步自由生成的路线，但实验设置不同，不能依据成功率直接排名。
+ 
+-其他路线优化的是不同瓶颈：[iSHIFT](https://arxiv.org/abs/2512.22009v1) 在快/慢视觉推理与感知区域间自适应切换；[MobileExplorer](https://arxiv.org/abs/2605.26546v1) 利用 VLM 等待时间并行探索并回滚；[MobileRL](https://arxiv.org/abs/2509.18119v2) 与 [UI-TARS-2](https://arxiv.org/abs/2509.02544v2) 通过多轮 RL 提升端到端策略；[SeeClick](https://arxiv.org/abs/2401.10935v2) 聚焦截图 grounding。它们提示一个更实际的组合方向：Jev 负责低风险、有充分结构证据的高频选择，视觉 grounder 补足树外目标，慢 VLM 处理歧义与重规划，verifier 检查终态，RL/轨迹数据训练恢复策略。
++其他工作处理的是互补瓶颈：[iSHIFT](https://arxiv.org/abs/2512.22009v1) 调节快慢视觉推理，[MobileExplorer](https://arxiv.org/abs/2605.26546v1) 在 VLM 推理期间并行探索，[MobileRL](https://arxiv.org/abs/2509.18119v2) 与 [UI-TARS-2](https://arxiv.org/abs/2509.02544v2) 强化多轮策略，[SeeClick](https://arxiv.org/abs/2401.10935v2) 聚焦视觉 grounding。基于这些互补能力，可优先验证一种组合式架构：Jev 处理结构证据充分、风险较低的高频选择；视觉 grounder 补足树外目标；慢 VLM 处理歧义与重规划；独立 verifier 检查终态。现有材料尚未对这一组合做统一实验。
+ 
+-## 4. 研发判断与建议
++## 4. 研发建议
+ 
+-短期最值得验证的是“可选择性委派”，而非全量替换：仅当候选覆盖充分、目标和前置条件明确、预期状态变化可观测时交给 Jev；低置信度、连续无进展、树与截图冲突时升级到 VLM/视觉模型。候选描述应显式包含控件身份、可用条件、动作后预期变化，并把 `none/BLOCKED` 作为一等选项。完成判断应独立于动作选择，至少检查关键终态或让 verifier 复核，避免局部 `DONE` 被误当成任务成功。
++短期应验证“选择性委派”，而非全量替换。只有当候选覆盖充分、目标与前置条件明确、动作后的状态变化可观察时才交给 Jev；低置信、连续无进展或树与截图冲突时升级到 VLM/视觉模型。候选描述应包含控件身份、前置条件和预期变化，并保留 `none/BLOCKED`。完成判断应与动作选择分离，防止局部 `DONE` 被误当成全局成功。
+ 
+-实验上应在同一 controller 内做 Jev、小 VLM、规则/打分器的等接口对照，并按任务难度和树覆盖率分层；同时记录候选覆盖率、选择准确率、交接正确率、恢复率、轨迹长度、全量成本及单位成功成本。对于中文与端侧场景，还需单独验证中文控件语义、输入能力、量化后的校准和真实设备延迟。
++实验应在同一 controller、候选集和预算下，对照 Jev、小 VLM 与规则/打分器，并按任务难度和树覆盖率分层。除成功率和单次决策时延外，还应报告候选覆盖率、选择与交接正确率、恢复率、轨迹长度、失败开销，以及包含失败尝试的单位成功成本和时间。
+ 
+-总体而言，Jev 在 mobile GUI 中最有价值的定位不是“更小的端到端 Agent”，而是**被工作流严格约束的快速决策层**。现有证据已支持其显著降低局部执行成本，但系统收益取决于上游候选质量和下游验证/恢复。由于直接论文仅两篇、模型闭源、基线与统计口径不完全一致，当前结论应视为早期工程证据，而不是已定型的领域共识；这一判断也与早期 TDM 证据审计所述“主要优势在时延与成本，typed readout 尚无独立准确率优势”一致（[Early Evidence Audit](https://arxiv.org/abs/2609.32160v1)）。
++总体上，Jev 在 mobile GUI 中最可信的定位是**工作流约束下的快速决策层**。直接证据仍少，模型闭源，系统接口与统计口径也不统一。[早期 TDM 证据审计](https://arxiv.org/abs/2609.32160v1) 同样认为，当前更清晰的收益在时延和成本，typed readout 尚未显示独立的准确率优势；该审计仅覆盖 Jev 发布后最初九天，也应视为早期证据地图，而非定论。

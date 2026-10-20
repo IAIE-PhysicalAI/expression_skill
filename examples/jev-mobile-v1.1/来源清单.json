@@ -1,0 +1,199 @@
+[
+  {
+    "id": "P01",
+    "url": "https://arxiv.org/abs/2609.30186v1",
+    "title": "Jev-Mobile: Jev as an Executor for Mobile GUI Agents",
+    "published": "2026-09-24T17:30:32Z",
+    "updated": "2026-09-24T17:30:32Z",
+    "abstract_page_sha256": "543ed766c6d6aca4bdba5fe09b98b7234b92172db98747337f43f9d378ebbb96",
+    "html_url": "https://arxiv.org/html/2609.30186v1",
+    "html_sha256": "ddc55d413582d0a17eec43bb37ffaeb348c4228b434694cc653853de2b32d33a",
+    "extracted_chars": 20140,
+    "supplied_chars": 20140,
+    "input_sha256": "147da0d6dab513a013634df3bff9aaa0d903a5ef908ead195fdb81e017507ae9"
+  },
+  {
+    "id": "P02",
+    "url": "https://arxiv.org/abs/2610.13092v1",
+    "title": "When Faster Decisions Do Not Make Better Agents: An Empirical Study of Jev in Agent Workflows",
+    "published": "2026-10-09T06:45:23Z",
+    "updated": "2026-10-09T06:45:23Z",
+    "abstract_page_sha256": "cdd7b8ff4f476dd6ded5f74cf0f9fbc57b554a2d342ca706f56bfe72cfb48d78",
+    "html_url": "https://arxiv.org/html/2610.13092v1",
+    "html_sha256": "3db7474953cbe5a3052fb22793038f2383bdd0e7c775af06494a5e8501646d18",
+    "extracted_chars": 34880,
+    "supplied_chars": 34880,
+    "input_sha256": "1ab908cbf576cc43cf90624ab20a99dec17287dc89ea10fdd52de01d8e55d9ae"
+  },
+  {
+    "id": "P03",
+    "url": "https://arxiv.org/abs/2609.25845v1",
+    "title": "Visual Jev: Accurate and Efficient Decisions from Shared Visual Context",
+    "published": "2026-09-22T08:12:29Z",
+    "updated": "2026-09-22T08:12:29Z",
+    "abstract_page_sha256": "cda226dc9f83f227d5b0c88125108935e06c719f0b15b466c3f7123e68139d8a",
+    "html_url": "https://arxiv.org/html/2609.25845v1",
+    "html_sha256": "56d475a7b67930d1a3487faf4c0cda8efe93865f9dd112c3bdc5e2d5282f1695",
+    "extracted_chars": 28670,
+    "supplied_chars": 8481,
+    "input_sha256": "61dd9e30beabd83776ff24b0217746b6816c0c283ba5a5208a872fd6e6e14487"
+  },
+  {
+    "id": "P04",
+    "url": "https://arxiv.org/abs/2609.36965v1",
+    "title": "Chinese-Jev: Bringing System One Model to Chinese-Language Tasks",
+    "published": "2026-09-29T08:02:27Z",
+    "updated": "2026-09-29T08:02:27Z",
+    "abstract_page_sha256": "3f7938cf0aad4e0b1dc33d315e606811553db0ed48fe92b39384c3d9592137d4",
+    "html_url": "https://arxiv.org/html/2609.36965v1",
+    "html_sha256": "0ba9ce6a20332ef9c0eeb8d174dc54eec3e0c29560491d1cf79a5cc8fabbbeb0",
+    "extracted_chars": 33111,
+    "supplied_chars": 8083,
+    "input_sha256": "aafd5260ba4e7767c62374ef31eb1b4e380ebb7642c0068ec50b3dc8dd71bee6"
+  },
+  {
+    "id": "P05",
+    "url": "https://arxiv.org/abs/2610.11692v1",
+    "title": "Can Jev be Your Q or Policy in Reinforcement Learning?",
+    "published": "2026-10-08T11:02:14Z",
+    "updated": "2026-10-08T11:02:14Z",
+    "abstract_page_sha256": "d4e5f10bada4017a8acb4c6e277561975d01f7b4fdeea0125bc4d0612f30cc70",
+    "html_url": "https://arxiv.org/html/2610.11692v1",
+    "html_sha256": "cf56a203d3a016071eb16714612ed8d0caeb4fb2e7fa786673f0487d9d8585fa",
+    "extracted_chars": 34141,
+    "supplied_chars": 8369,
+    "input_sha256": "a4661bc3b10b28f614cedb15541705e0a2fc41a8cfd776a41572b670feffe24c"
+  },
+  {
+    "id": "P06",
+    "url": "https://arxiv.org/abs/2610.00437v1",
+    "title": "JevSpawn: Adaptive Agentic Inference through Compositional Action Spaces",
+    "published": "2026-09-30T17:23:01Z",
+    "updated": "2026-09-30T17:23:01Z",
+    "abstract_page_sha256": "e9fe32d105ee52f1a74a95887d3e64aab75045c33a064854fb079b1637ebad19",
+    "html_url": "https://arxiv.org/html/2610.00437v1",
+    "html_sha256": "416e4cf8679da260fc4e79b63a622f03f59c1bb7e0555420e2b120dcf8eba59c",
+    "extracted_chars": 26108,
+    "supplied_chars": 7922,
+    "input_sha256": "64d54b0243bfda38f76e20e0bed13bcc0d7e851c6fab6cf09f01bc864ca2d9cc"
+  },
+  {
+    "id": "P07",
+    "url": "https://arxiv.org/abs/2610.09188v1",
+    "title": "From Probabilities to Decisions: Search and Multi-Teacher Distillation with Jev",
+    "published": "2026-10-06T22:37:58Z",
+    "updated": "2026-10-06T22:37:58Z",
+    "abstract_page_sha256": "5f649afcbaef55d704e4a9df07e5aa1d5e084f69337ac34e16e7cdcb055b03be",
+    "html_url": "https://arxiv.org/html/2610.09188v1",
+    "html_sha256": "047d74df2a5419db7eab70039dc42e05ddacb943189daa3e68eebdc9e7e10a21",
+    "extracted_chars": 27390,
+    "supplied_chars": 8492,
+    "input_sha256": "1fd14a0fe760da5082a01567edc9f167262928d4bb772e62c2d48326217467ca"
+  },
+  {
+    "id": "P08",
+    "url": "https://arxiv.org/abs/2609.32160v1",
+    "title": "Typed Decision Models: An Early Evidence Audit and Evaluation Checklist",
+    "published": "2026-09-26T02:28:14Z",
+    "updated": "2026-09-26T02:28:14Z",
+    "abstract_page_sha256": "9d13797b23dc0ebfd268377f7fa1b2d86c96d114b109b53818b0e0551145119b",
+    "html_url": "https://arxiv.org/html/2609.32160v1",
+    "html_sha256": "acad1c97dfc43a177ad2928ca2065442b538d35d824b49a7d7e6ba1bc3fd7508",
+    "extracted_chars": 48650,
+    "supplied_chars": 8131,
+    "input_sha256": "a41043a8ef8b76bb152395d60371b1b74a20c47dc0ea39187521d5377e1598a4"
+  },
+  {
+    "id": "P09",
+    "url": "https://arxiv.org/abs/2512.22009v1",
+    "title": "iSHIFT: Lightweight Slow-Fast GUI Agent with Adaptive Perception",
+    "published": "2025-12-26T12:09:15Z",
+    "updated": "2025-12-26T12:09:15Z",
+    "abstract_page_sha256": "5cc70bce9e925983b522c78f79e7ba07583dc5d6f05262120b07ddbadb5f4177",
+    "input_sha256": "119df4ed164c803a49885e010fa38b3306a7568012b18c15bd31e25486d2493e"
+  },
+  {
+    "id": "P10",
+    "url": "https://arxiv.org/abs/2605.26546v1",
+    "title": "MobileExplorer: Accelerating On-Device Inference for Mobile GUI Agents via Online Exploration",
+    "published": "2026-05-26T04:53:53Z",
+    "updated": "2026-05-26T04:53:53Z",
+    "abstract_page_sha256": "bcb4b5b3c3c638f1502600dbe3f4adb5e4f6b9a314410b8fc403b0708153035d",
+    "input_sha256": "047fbf33b8ffd8af7f17638fb1537fab3ccf2e05e8a0c0e9bf1e10de892a6240"
+  },
+  {
+    "id": "P11",
+    "url": "https://arxiv.org/abs/2503.15937v5",
+    "title": "Advancing Mobile GUI Agents: A Verifier-Driven Approach to Practical Deployment",
+    "published": "2025-03-20T08:25:00Z",
+    "updated": "2026-02-21T01:36:43Z",
+    "abstract_page_sha256": "912e76bfd760a4462e7fcf843e7fb6be96579d7b93cab7cb0d12fd6d63824d97",
+    "input_sha256": "30b99c1d0544eb4fd5cf662d310781f7f75d9989fcf3e780c8726e8131958cf5"
+  },
+  {
+    "id": "P12",
+    "url": "https://arxiv.org/abs/2509.18119v2",
+    "title": "MobileRL: Online Agentic Reinforcement Learning for Mobile GUI Agents",
+    "published": "2025-09-10T13:09:27Z",
+    "updated": "2025-10-24T17:13:05Z",
+    "abstract_page_sha256": "9ef14022c8a3b1d85e02790a750b31fb641c5bf57b174b6465cd5d6e27525daa",
+    "input_sha256": "0ef19ecc4a3030adedfddfc8850494320c70b7ebe85b195f71da1146cd141704"
+  },
+  {
+    "id": "P13",
+    "url": "https://arxiv.org/abs/2509.02544v2",
+    "title": "UI-TARS-2 Technical Report: Advancing GUI Agent with Multi-Turn Reinforcement Learning",
+    "published": "2025-09-02T17:44:45Z",
+    "updated": "2025-09-05T14:59:27Z",
+    "abstract_page_sha256": "3b0c75bd7a6255dc05a4b4251ddbe804355758fd233bdc07dfefe482efdfa935",
+    "input_sha256": "012a0dbb5ff66f170bd3c9003d1bb4de79061c4abbb41d44a12691d3f780cc2c"
+  },
+  {
+    "id": "P14",
+    "url": "https://arxiv.org/abs/2405.14573v5",
+    "title": "AndroidWorld: A Dynamic Benchmarking Environment for Autonomous Agents",
+    "published": "2024-05-23T13:48:54Z",
+    "updated": "2025-04-06T20:37:50Z",
+    "abstract_page_sha256": "84824419227fb39f3540bc7074b7b788aec0c241c6721b60e515ca2e41c60209",
+    "input_sha256": "e5e3cec94220123be642d75d922398ac80a43323d31cfc4849858457326450da"
+  },
+  {
+    "id": "P15",
+    "url": "https://arxiv.org/abs/2401.10935v2",
+    "title": "SeeClick: Harnessing GUI Grounding for Advanced Visual GUI Agents",
+    "published": "2024-01-17T08:10:35Z",
+    "updated": "2024-02-23T04:36:51Z",
+    "abstract_page_sha256": "5edeeef7eef9eaf12c4e6bb82af597d5a20de763e8c0b61c97ab1e7e5a545207",
+    "input_sha256": "393de1501a7370ea380258dbd62cca0cfb12246bbaae7fecbb05a65a67c9c4b3"
+  },
+  {
+    "id": "P16",
+    "url": "https://arxiv.org/abs/2602.16855v1",
+    "title": "Mobile-Agent-v3.5: Multi-platform Fundamental GUI Agents",
+    "published": "2026-02-15T01:52:19Z",
+    "updated": "2026-02-15T01:52:19Z",
+    "abstract_page_sha256": "b9627408377b66f477c8b6825f8d6dbe78d7f2ff4e01f1461fc6e37cae517e0d",
+    "input_sha256": "f6de7fef4f6cf24ca0ef85fe005bbfdd50cbcdfa122c22c8e5948102dfc7e839"
+  },
+  {
+    "id": "T01",
+    "url": "https://docs.typesafe.ai/introduction.md",
+    "raw_sha256": "f1dbcd1857df8903bdfdbab4acba8aca88f9711d399dea1f6588c8a7a34ea926",
+    "input_sha256": "a269f222c158ac147b4b50c2ded7bf4b22ed72c2ffa4f3a482e323f95450f636",
+    "scope": "页面前6500字符以内"
+  },
+  {
+    "id": "T02",
+    "url": "https://docs.typesafe.ai/images.md",
+    "raw_sha256": "dff7a319d7232f769da220aa171b9f66884d76c10a0a3232b6c5de35ccdbd7ee",
+    "input_sha256": "bf5caab9a88634ea74a80ceffa433cb01469f0b39e223257faa4ad685aa177c9",
+    "scope": "页面前6500字符以内"
+  },
+  {
+    "id": "T03",
+    "url": "https://docs.typesafe.ai/primitives/choice.md",
+    "raw_sha256": "ae9c49b815ee30b28ed851e22b63041130fba50ae41368d41a5d80b571f383bb",
+    "input_sha256": "c39a9630a49b6330ca59804568240a29575a30e4c2a8fd392916cfbde5abd5b0",
+    "scope": "页面前6500字符以内"
+  }
+]
