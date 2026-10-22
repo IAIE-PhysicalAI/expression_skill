@@ -8,13 +8,35 @@
 
 当前示例与使用指南围绕模型介绍、技术机制解释和方案比较展开。技能主体、规则和使用提示均为中文，技术标识为 `chinese-expression`。
 
-当前正式版为 **v1.1.0**，已完成灰度测试，采用分阶段读取职责的通用模式。完整规则由入口文件与 8 份配套指令组成，详见[更新记录](CHANGELOG.md)。
+当前分支为 **v2.0.0 灰度版**（`gray/v2.0.0`），由原 `feature/staged-instructions-strict-mode` 分支重命名而来。正式版仍为 `main` 上的 **v1.1.0**。灰度版完整规则由入口文件与 9 份配套指令组成，版本号保存在 `SKILL.md` 的 `metadata.version` 中，详见[更新记录](CHANGELOG.md)。
 
-[阅读完整技能](skills/chinese-expression/SKILL.md) · [下载发布包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
+[阅读当前灰度技能](skills/chinese-expression/SKILL.md) · [灰度测试指南](GRAY_TEST.md) · [下载 v1.1.0 正式包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v1.1.0) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
+
+## v2.0.0 的变化
+
+- 准备时在大纲中写清重点的判断或想揭示的问题，并注明段落或段落组借材料说明什么、承担什么承接作用。
+- 用户需求集中保存在大纲文件末尾，纲要内部保留文章的结构与展开安排。追问中的局部改写持续更新原大纲和正文。
+- 组织验收先从正文判断实际说明了什么，再对照大纲中的重点和段落作用；检查全文与各部分的主线，避免把事实罗列或结论出现过当成充分展开。
+- 新增追问与修改职责，区分讨论、检查和实际编辑，按需要接续阶段并保护用户对当前稿的修改。
+
+本版继续使用五阶段流程，内容编辑职责保持原有设计。上述变化尚待灰度任务验证；现有 v1.x 示例不代表 v2.0.0 的效果。
 
 ## 安装
 
-### 使用 skills CLI
+### 安装 v2.0.0 灰度版
+
+使用 Git 获取指定分支，再从本地目录安装，避免误装默认分支的正式版：
+
+```bash
+git clone --branch gray/v2.0.0 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v2
+npx skills add ./expression-skill-v2 --skill chinese-expression --agent codex
+```
+
+也可以将克隆目录中的 `skills/chinese-expression/` 整个文件夹放入目标 agent 的技能目录。记录 `git -C expression-skill-v2 rev-parse HEAD` 的输出，以区分灰度期间的不同提交。本次通过分支分发，Releases 中的正式包仍为 v1.1.0。
+
+更新灰度版时，在克隆目录执行 `git pull --ff-only` 后重新安装；升级前备份定制内容，回退时用 v1.1.0 正式包替换整个技能目录。旧分支使用者的迁移命令见[灰度指南](GRAY_TEST.md#旧分支迁移)。
+
+### 使用 skills CLI 安装正式版
 
 需要能够运行 `npx` 的 Node.js 环境。执行以下命令，再按提示选择使用的 agent：
 
@@ -36,7 +58,7 @@ npx skills add IAIE-PhysicalAI/expression_skill --skill chinese-expression --age
 npx skills add IAIE-PhysicalAI/expression_skill --list
 ```
 
-### 手动下载
+### 手动下载正式版
 
 从 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) 下载 `chinese-expression.zip`，解压后将整个 `chinese-expression` 文件夹放入目标 agent 的技能目录。完整保留 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`，不能只复制入口文件。附件 `SHA256SUMS.txt` 可用于核对下载包。
 
@@ -84,12 +106,22 @@ Agent 按阶段读取职责，在同一份工作文档上完成准备、补充�
 
 提供原稿、目标读者、核心想法、材料边界和风格参考，有助于 agent 判断重点与详略。
 
+### 追问与局部改写
+
+```text
+请使用 $chinese-expression 修改现有稿件的第二节。
+这一节已有结论，但实验介绍没有说明它为什么支持该结论。
+沿用当前正文和大纲，只调整这一节及必要的前后承接，保留数据和限定。
+```
+
+只要求讨论或检查时，技能交付分析；明确要求修改时才接续编辑。局部改写使用原有大纲，在相关条目落实结构与重点变化，将当前有效的用户需求保存在文件末尾。
+
 ## 实际示例：Jev 技术分享
 
 通过 **Git diff 展示同一份文档润色前后的真实变化**：初稿来自未加载本技能的独立会话，修订会话读取对应技能版本后原地修改。正文按实际运行结果保留。
 
 - **[示例入口](examples/润色示例.md)**：按技能版本查看前后差异。
-- [v1.1.0：Jev 与 Mobile GUI Agent 调研](examples/jev-mobile-v1.1/实验说明.md)：从此前无技能初稿出发，使用本次正式版规则润色；附大纲、实际操作记录和 diff。
+- [v1.1.0：Jev 与 Mobile GUI Agent 调研](examples/jev-mobile-v1.1/实验说明.md)：从此前无技能初稿出发，使用 v1.1.0 规则润色；附大纲、实际操作记录和 diff。
 - [旧版：Jev 与其他模型的比较](examples/jev/实验说明.md)：保留 2026-10-18 的原始运行、已知遗漏和对应版本，方便追溯。
 
 各示例使用固定资料，展示信息组织与润色行为，不包含 Jev API 实测。额外编辑机会、模型与运行时间会影响结果，单例不能证明技能带来稳定提升。具体材料范围与尚存问题见各例说明。
@@ -100,13 +132,13 @@ Agent 按阶段读取职责，在同一份工作文档上完成准备、补充�
 
 | 阶段 | 对应步骤 | 需要完成的工作 |
 | --- | --- | --- |
-| 准备 | 一至三步合并 | 确认核心问题，理解已有材料，保存具有层级和详略安排的大纲 |
+| 准备 | 一至三步合并 | 确认核心问题，理解材料，保存重点、段落作用和展开关系；文件末尾单列用户需求 |
 | 补充信息 | 第四步独立 | 根据大纲中的重点观点再次检索与核实，记录依据、出处和缺口 |
 | 内容成稿 | 第五步独立 | 确定每段核心，选择并组织信息，写入同一份工作文档 |
-| 校验与修复 | 第六步独立 | 先检查组织，下一轮检查逐句支撑；验收只报问题，回退到对应编辑阶段修复 |
+| 校验与修复 | 第六步独立 | 从正文判断主线与各段作用，再核对大纲；下一轮检查逐句支撑，发现问题后定向回退与复验 |
 | 个性化风格 | 第七步独立 | 调整作者特有的语气、节奏和表达方式，保存并复查 |
 
-大纲明确同级标题的并列关系、子标题的从属关系，并标出需要详细介绍的内容。后续改变结构或重点时，大纲也要同步更新。
+大纲明确标题关系、重点想说明的判断或问题，以及段落或段落组的作用。背景和过渡交代服务对象，不必各自提出观点，也不预先固定所有自然段。用户需求单列在文件末尾，只维护当前有效要求；后续局部改写在原纲要中修改相关部分。
 
 每轮修改针对具体问题。依据不足就补充材料，核心信息孤立就补足解释与关联，句间推理不成立就重新组织。已符合要求的内容保留，不为增加轮次而强行修改。
 
@@ -145,7 +177,7 @@ expression_skill/
 ├── examples/
 │   ├── 润色示例.md
 │   ├── jev/                  旧版示例及原始记录
-│   └── jev-mobile-v1.1/      正式版示例及原始记录
+│   └── jev-mobile-v1.1/      v1.1.0 示例及原始记录
 └── skills/
     └── chinese-expression/
         ├── SKILL.md
@@ -164,7 +196,7 @@ expression_skill/
 
 欢迎通过 [Issues](https://github.com/IAIE-PhysicalAI/expression_skill/issues) 提交实际使用中遇到的问题。建议附上技能版本、使用的 agent、脱敏后的输入与输出，以及期望改善的具体地方。
 
-v1.1.0 已完成灰度测试并纳入 `main`。后续问题仍可按[使用测试与反馈指南](GRAY_TEST.md)记录任务、结果和具体缺口。
+v2.0.0 在 `gray/v2.0.0` 分支灰度，尚未合入 `main`。请按[使用测试与反馈指南](GRAY_TEST.md)记录提交号、任务、实际正文和大纲，重点反馈主线展开、需求分离和局部修改是否有效。
 
 规则调整优先解决可复现的问题，并保持流程清楚、篇幅适当。
 

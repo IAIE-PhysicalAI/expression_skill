@@ -1,20 +1,37 @@
-# 语言表达 Skill 使用测试与反馈指南
+# 语言表达 v2.0.0 灰度测试与反馈指南
 
-v1.1.0 已完成灰度测试并正式发布，使用通用模式：在正常的 Agent 会话中按阶段读取配套职责，在同一份正文上持续修改。本指南保留原文件路径，供后续测试和问题反馈使用。
+v2.0.0 在 `gray/v2.0.0` 分支灰度，正式版仍为 v1.1.0。新版重点验证大纲中的核心与段落作用、正文主线验收，以及追问中的局部修改。本轮尚无已发布的 v2.0.0 写作对照结果，格式检查不代表写作效果通过。
 
 请完整安装 `chinese-expression` 文件夹，保留其中的 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`。
 
-## 获取正式版
+## 获取灰度版
 
-正式发布包：
+使用 Git 获取指定分支：
 
-```text
-https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest
+```bash
+git clone --branch gray/v2.0.0 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v2
+git -C expression-skill-v2 rev-parse HEAD
+npx skills add ./expression-skill-v2 --skill chinese-expression --agent codex
 ```
 
-下载 `chinese-expression.zip`，解压后将整个 `chinese-expression/` 文件夹放到 Agent 的技能目录。更新前备份已有定制内容，再用完整新目录替换旧目录。
+也可手动安装 `expression-skill-v2/skills/chinese-expression/`。更新前备份定制内容，安装完整目录，并核对 `SKILL.md` 中的 `metadata.version` 为 `2.0.0`。灰度分支会继续更新，反馈时同时记录提交号。
 
-记录 Release 标签或仓库提交号，以便复现。旧灰度包代表当时的预览版本，不能当作最新正式版。
+正式版下载与回退使用 [v1.1.0 Release](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v1.1.0) 中的完整包；整目录替换，避免留下新版独有指令。`releases/latest` 当前不提供 v2.0.0 灰度版。
+
+## 旧分支迁移
+
+原 `feature/staged-instructions-strict-mode` 已重命名为 `gray/v2.0.0`。在没有未提交改动的旧克隆中执行：
+
+```bash
+git switch feature/staged-instructions-strict-mode
+git branch -m gray/v2.0.0
+git config --replace-all remote.origin.fetch '+refs/heads/gray/v2.0.0:refs/remotes/origin/gray/v2.0.0' '^\+refs/heads/feature/staged-instructions-strict-mode:'
+git fetch origin --prune
+git branch --set-upstream-to=origin/gray/v2.0.0 gray/v2.0.0
+git pull --ff-only
+```
+
+其中 fetch 配置迁移用于兼容只克隆过旧分支的目录。若旧分支有自己的提交，先保留本地工作，再按实际差异合并；不要用强制重置覆盖。
 
 ## 默认测试方式
 
@@ -35,6 +52,7 @@ https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest
 - 基于固定资料成稿；
 - 已有文档的结构与表达润色；
 - 需要核对论据、条件和结论边界的调研总结。
+- 在已有稿件上先讨论、再提出局部改写，并连续补充或更改要求。
 
 观察 Agent 是否实际保存大纲，是否按需读取阶段指令，是否在同一份正文上修改，是否在组织验收与逐句支撑验收开始后分别重新读取当前正文。阶段没有发现问题时可以直接通过，不以修改次数评价执行质量。
 
@@ -57,6 +75,19 @@ https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest
 7. 是否保留作者原意与声音，没有把所有文章改成同一种平滑文风。
 8. 验收发现问题后，是否回到对应阶段修改并重新读取实际文件复验。
 
+## v2.0.0 重点观察
+
+| 场景 | 检查实际产物与操作 |
+| --- | --- |
+| 重点小节已有结论，但展开零散 | 大纲是否写清核心与段落作用；正文中的事实是否真正解释、支持或限定核心，而非仅在末尾补一句结论 |
+| 背景或过渡段 | 是否服务于重点或上下文，没有为了满足检查而硬塞独立观点 |
+| 用户连续追加要求 | 当前有效需求是否集中在大纲文件末尾，纲要内部是否仍保持文章逻辑；已替代要求是否更新 |
+| 追问后局部改写 | 是否沿用原大纲与正文，只更新相关条目和必要承接，没有另建局部大纲或覆盖用户的新修改 |
+| 只要求讨论或检查 | 是否交付分析，没有据此写回正文 |
+| 组织验收 | 能否从正文读出主线与各部分作用，再核对大纲；不能以意图、结论出现次数或程序数字比对代替内容判断 |
+
+组织验收的判断顺序依靠 Agent 执行；当前仍可能同时读取正文和大纲，不是隔离大纲的盲审。比较效果时，可请未读大纲的读者概括正文实际说明了什么，并记录与作者意图的差距。
+
 ## 反馈模板
 
 提交 Issue 或反馈给维护者时，建议提供以下内容。涉及内部资料时请先脱敏，不要上传运行记录中的敏感原文。
@@ -68,7 +99,7 @@ https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest
 - 可用工具与材料范围：
 
 ### 任务
-- 任务类型：新写作／固定材料成稿／润色
+- 任务类型：新写作／固定材料成稿／润色／追问局部修改
 - 原始提示词：
 - 读者与用途：
 - 材料边界：
@@ -76,6 +107,7 @@ https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest
 ### 结果
 - 最终文档：
 - 配套大纲：
+- 追问要求与修改前后版本（如有）：
 - 是否发生定向回退与复验：
 
 ### 评价
