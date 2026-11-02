@@ -1,37 +1,18 @@
-# 语言表达 v2.0.0 灰度测试与反馈指南
+# 语言表达 v2.0.0 使用测试与反馈指南
 
-v2.0.0 在 `gray/v2.0.0` 分支灰度，正式版仍为 v1.1.0。新版重点验证大纲中的核心与段落作用、正文主线验收，以及追问中的局部修改。本轮尚无已发布的 v2.0.0 写作对照结果，格式检查不代表写作效果通过。
+v2.0.0 已完成灰度实验并正式发布。新版重点改进大纲中的核心与段落作用、正文主线验收，以及追问中的局部修改。后续测试和问题反馈仍可使用本指南。
 
 请完整安装 `chinese-expression` 文件夹，保留其中的 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`。
 
-## 获取灰度版
+## 获取正式版
 
-使用 Git 获取指定分支：
-
-```bash
-git clone --branch gray/v2.0.0 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v2
-git -C expression-skill-v2 rev-parse HEAD
-npx skills add ./expression-skill-v2 --skill chinese-expression --agent codex
-```
-
-也可手动安装 `expression-skill-v2/skills/chinese-expression/`。更新前备份定制内容，安装完整目录，并核对 `SKILL.md` 中的 `metadata.version` 为 `2.0.0`。灰度分支会继续更新，反馈时同时记录提交号。
-
-正式版下载与回退使用 [v1.1.0 Release](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v1.1.0) 中的完整包；整目录替换，避免留下新版独有指令。`releases/latest` 当前不提供 v2.0.0 灰度版。
-
-## 旧分支迁移
-
-原 `feature/staged-instructions-strict-mode` 已重命名为 `gray/v2.0.0`。在没有未提交改动的旧克隆中执行：
+使用 skills CLI 安装：
 
 ```bash
-git switch feature/staged-instructions-strict-mode
-git branch -m gray/v2.0.0
-git config --replace-all remote.origin.fetch '+refs/heads/gray/v2.0.0:refs/remotes/origin/gray/v2.0.0' '^\+refs/heads/feature/staged-instructions-strict-mode:'
-git fetch origin --prune
-git branch --set-upstream-to=origin/gray/v2.0.0 gray/v2.0.0
-git pull --ff-only
+npx skills add IAIE-PhysicalAI/expression_skill --skill chinese-expression --agent codex
 ```
 
-其中 fetch 配置迁移用于兼容只克隆过旧分支的目录。若旧分支有自己的提交，先保留本地工作，再按实际差异合并；不要用强制重置覆盖。
+也可从[最新 Release](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest)下载 `chinese-expression.zip`，解压后手动安装完整目录。更新前备份定制内容，并核对 `SKILL.md` 中的 `metadata.version` 为 `2.0.0`。回退时同样使用对应 Release 的完整包整目录替换，避免混用不同版本的指令文件。
 
 ## 默认测试方式
 

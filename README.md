@@ -8,9 +8,9 @@
 
 当前示例与使用指南围绕模型介绍、技术机制解释和方案比较展开。技能主体、规则和使用提示均为中文，技术标识为 `chinese-expression`。
 
-当前分支为 **v2.0.0 灰度版**（`gray/v2.0.0`），由原 `feature/staged-instructions-strict-mode` 分支重命名而来。正式版仍为 `main` 上的 **v1.1.0**。灰度版完整规则由入口文件与 9 份配套指令组成，版本号保存在 `SKILL.md` 的 `metadata.version` 中，详见[更新记录](CHANGELOG.md)。
+当前正式版为 **v2.0.0**，已完成灰度实验。完整规则由入口文件与 9 份配套指令组成，版本号保存在 `SKILL.md` 的 `metadata.version` 中，详见[更新记录](CHANGELOG.md)。
 
-[阅读当前灰度技能](skills/chinese-expression/SKILL.md) · [灰度测试指南](GRAY_TEST.md) · [下载 v1.1.0 正式包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v1.1.0) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
+[阅读完整技能](skills/chinese-expression/SKILL.md) · [下载发布包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) · [使用测试与反馈指南](GRAY_TEST.md) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
 
 ## v2.0.0 的变化
 
@@ -19,24 +19,11 @@
 - 组织验收先从正文判断实际说明了什么，再对照大纲中的重点和段落作用；检查全文与各部分的主线，避免把事实罗列或结论出现过当成充分展开。
 - 新增追问与修改职责，区分讨论、检查和实际编辑，按需要接续阶段并保护用户对当前稿的修改。
 
-本版继续使用五阶段流程，内容编辑职责保持原有设计。上述变化尚待灰度任务验证；现有 v1.x 示例不代表 v2.0.0 的效果。
+本版继续使用五阶段流程，内容编辑职责保持原有设计。v1.x 示例作为历史运行记录保留，不代表 v2.0.0 的效果。
 
 ## 安装
 
-### 安装 v2.0.0 灰度版
-
-使用 Git 获取指定分支，再从本地目录安装，避免误装默认分支的正式版：
-
-```bash
-git clone --branch gray/v2.0.0 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v2
-npx skills add ./expression-skill-v2 --skill chinese-expression --agent codex
-```
-
-也可以将克隆目录中的 `skills/chinese-expression/` 整个文件夹放入目标 agent 的技能目录。记录 `git -C expression-skill-v2 rev-parse HEAD` 的输出，以区分灰度期间的不同提交。本次通过分支分发，Releases 中的正式包仍为 v1.1.0。
-
-更新灰度版时，在克隆目录执行 `git pull --ff-only` 后重新安装；升级前备份定制内容，回退时用 v1.1.0 正式包替换整个技能目录。旧分支使用者的迁移命令见[灰度指南](GRAY_TEST.md#旧分支迁移)。
-
-### 使用 skills CLI 安装正式版
+### 使用 skills CLI
 
 需要能够运行 `npx` 的 Node.js 环境。执行以下命令，再按提示选择使用的 agent：
 
@@ -58,11 +45,11 @@ npx skills add IAIE-PhysicalAI/expression_skill --skill chinese-expression --age
 npx skills add IAIE-PhysicalAI/expression_skill --list
 ```
 
-### 手动下载正式版
+### 手动下载
 
 从 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) 下载 `chinese-expression.zip`，解压后将整个 `chinese-expression` 文件夹放入目标 agent 的技能目录。完整保留 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`，不能只复制入口文件。附件 `SHA256SUMS.txt` 可用于核对下载包。
 
-更新已有安装时，先备份自己的定制内容，再用新包替换整个技能目录。曾安装带严格模式的预览版时也采用整目录替换，避免遗留旧脚本或说明。v1.1.0 仅包含通用模式，使用它无需 Python 或独立调度器。
+更新已有安装时，先备份自己的定制内容，再用新包替换整个技能目录。曾安装预览版时也采用整目录替换，避免遗留旧文件。v2.0.0 使用现有 Agent 的文件读写能力，无需 Python 或独立调度器。
 
 也可以点击 GitHub 的 **Code → Download ZIP** 下载仓库，技能位于 `skills/chinese-expression/`。不同工具的技能目录和刷新方式可能不同，请以对应工具的说明为准。
 
@@ -196,7 +183,7 @@ expression_skill/
 
 欢迎通过 [Issues](https://github.com/IAIE-PhysicalAI/expression_skill/issues) 提交实际使用中遇到的问题。建议附上技能版本、使用的 agent、脱敏后的输入与输出，以及期望改善的具体地方。
 
-v2.0.0 在 `gray/v2.0.0` 分支灰度，尚未合入 `main`。请按[使用测试与反馈指南](GRAY_TEST.md)记录提交号、任务、实际正文和大纲，重点反馈主线展开、需求分离和局部修改是否有效。
+v2.0.0 已完成灰度实验并纳入 `main`。后续问题仍可按[使用测试与反馈指南](GRAY_TEST.md)记录版本、任务、实际正文和大纲，重点反馈主线展开、需求分离和局部修改是否有效。
 
 规则调整优先解决可复现的问题，并保持流程清楚、篇幅适当。
 
