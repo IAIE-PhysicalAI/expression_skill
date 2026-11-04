@@ -8,7 +8,7 @@
 
 技能主体、规则和使用提示均为中文。写作入口继续使用 `chinese-expression`，独立验收入口为 `chinese-expression-review`，两者配套安装。
 
-当前测试分支提供 **v3.0.0 灰度版**，沿用既有分支名 `gray/v2.0.0`；分支名称保留，两个 skill 的 `metadata.version` 均为 `3.0.0`。`main` 和正式 Release 仍为 **v2.0.0**，详见[更新记录](CHANGELOG.md)。
+当前测试分支为 **`gray/v3.0.0`**，两个 skill 的 `metadata.version` 均为 `3.0.0`。`main` 和正式 Release 仍为 **v2.0.0**，详见[更新记录](CHANGELOG.md)。
 
 [写作入口](skills/chinese-expression/SKILL.md) · [验收入口](skills/chinese-expression-review/SKILL.md) · [灰度测试与反馈指南](GRAY_TEST.md) · [v2.0.0 正式包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v2.0.0) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
 
@@ -28,7 +28,7 @@
 从既有测试分支获取 v3.0.0。打包需要 Python 3.9 或以上，脚本只使用标准库；输出必须是源包之外的新目录，已有输出不会被覆盖。
 
 ```bash
-git clone --branch gray/v2.0.0 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v3
+git clone --branch gray/v3.0.0 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v3
 git -C expression-skill-v3 rev-parse HEAD
 python3 expression-skill-v3/scripts/package_skills.py --output ./expression-skill-v3-install
 ```
