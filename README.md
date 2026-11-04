@@ -1,40 +1,46 @@
 # 语言表达 · Chinese Expression
 
-一份面向中文写作与润色的 Agent Skill，第一期聚焦技术分享文档：讲清一个技术或模型解决什么问题、如何工作、与其他方案有什么区别，以及如何判断它是否适合自己的场景。
+一套面向中文写作与润色的 Agent Skills，由写作主 agent 与一个独立的提问／验收子 agent 协作。现有示例聚焦技术分享文档：讲清一个技术或模型解决什么问题、如何工作、与其他方案有什么区别，以及如何判断它是否适合自己的场景。
 
 围绕作者的核心想法选择信息、组织论证，在同一份文档上分阶段修改，让重点讲清楚、句间逻辑成立，并保留作者的语言风格。
 
 **想法驱动，信息支撑。想法决定需要表达什么，逻辑决定如何组织与表达信息。**
 
-当前示例与使用指南围绕模型介绍、技术机制解释和方案比较展开。技能主体、规则和使用提示均为中文，技术标识为 `chinese-expression`。
+技能主体、规则和使用提示均为中文。写作入口继续使用 `chinese-expression`，独立验收入口为 `chinese-expression-review`，两者配套安装。
 
-当前正式版为 **v2.0.0**，已完成灰度实验。完整规则由入口文件与 9 份配套指令组成，版本号保存在 `SKILL.md` 的 `metadata.version` 中，详见[更新记录](CHANGELOG.md)。
+当前测试分支提供 **v3.0.0 灰度版**，沿用既有分支名 `gray/v2.0.0`；分支名称保留，两个 skill 的 `metadata.version` 均为 `3.0.0`。`main` 和正式 Release 仍为 **v2.0.0**，详见[更新记录](CHANGELOG.md)。
 
-[阅读完整技能](skills/chinese-expression/SKILL.md) · [下载发布包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) · [使用测试与反馈指南](GRAY_TEST.md) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
+[写作入口](skills/chinese-expression/SKILL.md) · [验收入口](skills/chinese-expression-review/SKILL.md) · [灰度测试与反馈指南](GRAY_TEST.md) · [v2.0.0 正式包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v2.0.0) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
 
-## v2.0.0 的变化
+## v3.0.0 的变化
 
-- 准备时在大纲中写清重点的判断或想揭示的问题，并注明段落或段落组借材料说明什么、承担什么承接作用。
-- 用户需求集中保存在大纲文件末尾，纲要内部保留文章的结构与展开安排。追问中的局部改写持续更新原大纲和正文。
-- 组织验收先从正文判断实际说明了什么，再对照大纲中的重点和段落作用；检查全文与各部分的主线，避免把事实罗列或结论出现过当成充分展开。
-- 新增追问与修改职责，区分讨论、检查和实际编辑，按需要接续阶段并保护用户对当前稿的修改。
+- 写作与验收拥有独立 skill 入口及各自的阶段文件。写作主 agent 负责准备、补材料、编辑、风格与修复；唯一的提问子 agent 分轮负责组织、支撑和修改后复验。
+- 提问方从自己的入口加载方法，不需读取写作入口或完整写作历史；当前工具支持时，派发采用不继承父会话历史的方式，并持续复用同一个提问 agent。
+- 共同标准集中到 `shared/表达原则.md`，提交版本、范围、问题格式与关闭规则集中到 `shared/交接协议.md`。修复只能标为待复验，由提问方读取新稿后确认解决。
+- 源包按角色分目录维护，打包脚本将共享规则带入各角色的发布目录并修正引用。仅检查请求可以没有大纲，结果只覆盖实际检查范围。
 
-本版继续使用五阶段流程，内容编辑职责保持原有设计。v1.x 示例作为历史运行记录保留，不代表 v2.0.0 的效果。
+保留原有阶段、同一工作稿、大纲与有效用户需求、事实边界和作者声音。已完成格式、引用、打包及局部检查—修复—复验的行为试运行；这些检查不代表 v3.0.0 已完成真实任务的系统性灰度或对照实验。现有示例保留其原始版本与实际结果。
 
-## 安装
+## 安装灰度版
 
-### 使用 skills CLI
+### 获取并打包源包
 
-需要能够运行 `npx` 的 Node.js 环境。执行以下命令，再按提示选择使用的 agent：
+从既有测试分支获取 v3.0.0。打包需要 Python 3.9 或以上，脚本只使用标准库；输出必须是源包之外的新目录，已有输出不会被覆盖。
 
 ```bash
-npx skills add IAIE-PhysicalAI/expression_skill --skill chinese-expression
+git clone --branch gray/v2.0.0 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v3
+git -C expression-skill-v3 rev-parse HEAD
+python3 expression-skill-v3/scripts/package_skills.py --output ./expression-skill-v3-install
 ```
 
-仅安装到当前项目的 Codex：
+源包中的两个入口引用包根目录的共享规则，不能直接把单个源 skill 文件夹拷入技能目录。打包后得到两个配套目录，共享规则已分别放入各自的 `references/shared/`，每个验收引用均可在自己的目录中读取。
+
+### 使用 skills CLI 安装打包结果
+
+需要能够运行 `npx` 的 Node.js 环境。在希望使用技能的项目目录中，将打包结果的路径传给安装工具：
 
 ```bash
-npx skills add IAIE-PhysicalAI/expression_skill --skill chinese-expression --agent codex
+npx skills add ./expression-skill-v3-install --skill chinese-expression chinese-expression-review --agent codex
 ```
 
 如需跨项目使用，在命令末尾添加 `--global`。安装位置由安装工具和目标 agent 决定。
@@ -42,22 +48,22 @@ npx skills add IAIE-PhysicalAI/expression_skill --skill chinese-expression --age
 安装前可以只查看仓库中可用的技能：
 
 ```bash
-npx skills add IAIE-PhysicalAI/expression_skill --list
+npx skills add ./expression-skill-v3-install --list
 ```
 
-### 手动下载
+### 手动安装与回退
 
-从 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases/latest) 下载 `chinese-expression.zip`，解压后将整个 `chinese-expression` 文件夹放入目标 agent 的技能目录。完整保留 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`，不能只复制入口文件。附件 `SHA256SUMS.txt` 可用于核对下载包。
+将打包结果中的 `chinese-expression/` 和 `chinese-expression-review/` 两个完整目录放在目标 agent 技能目录的同一层级，保留各自的 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`。两个入口的 `metadata.version` 应均为 `3.0.0`。
 
-更新已有安装时，先备份自己的定制内容，再用新包替换整个技能目录。曾安装预览版时也采用整目录替换，避免遗留旧文件。v2.0.0 使用现有 Agent 的文件读写能力，无需 Python 或独立调度器。
+升级前备份定制内容，再整目录替换，避免遗留旧版混合验收文件。回退使用 [v2.0.0 正式包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v2.0.0)，并移出 v3.0.0 专属的验收 skill，避免混用。备份保存在技能扫描目录之外。
 
-也可以点击 GitHub 的 **Code → Download ZIP** 下载仓库，技能位于 `skills/chinese-expression/`。不同工具的技能目录和刷新方式可能不同，请以对应工具的说明为准。
+当前灰度没有 v3.0.0 正式 Release，`releases/latest` 仍提供 v2.0.0。也可在测试分支页面下载源包 ZIP，再按上述方式打包；不要将默认主分支下载误认为本灰度版。写作流程使用 agent 的文件和子 agent 调度能力，不依赖 Python 运行独立调度器。
 
 ## 使用
 
 安装后，在支持技能调用的 agent 中指定 `chinese-expression`。Codex 中可以使用 `$chinese-expression`；其他工具按各自的技能调用方式使用。
 
-Agent 按阶段读取职责，在同一份工作文档上完成准备、补充信息、内容编辑、组织与逐句支撑验收、个性化风格调整。每个验收轮先读取职责，再重新读取已保存正文；修复后进入对应验收轮复查。
+写作主 agent 按阶段读取自己的方法，在同一份工作文档上完成准备、补充信息、内容编辑和个性化风格；提问子 agent 读取独立验收入口，分轮检查组织、逐句支撑和修改影响。每个验收轮重新读取已保存正文，结论绑定实际版本与范围，修复后交回同一个提问 agent 复验。
 
 ### 润色已有文档
 
@@ -115,21 +121,22 @@ Agent 按阶段读取职责，在同一份工作文档上完成准备、补充�
 
 ## 工作流程
 
-七个步骤按五个执行阶段组织，合并边界由技能明确规定：
+七个步骤保持原有阶段边界，写作与验收由两个执行者分别承担：
 
-| 阶段 | 对应步骤 | 需要完成的工作 |
+| 阶段 | 执行者 | 需要完成的工作 |
 | --- | --- | --- |
-| 准备 | 一至三步合并 | 确认核心问题，理解材料，保存重点、段落作用和展开关系；文件末尾单列用户需求 |
-| 补充信息 | 第四步独立 | 根据大纲中的重点观点再次检索与核实，记录依据、出处和缺口 |
-| 内容成稿 | 第五步独立 | 确定每段核心，选择并组织信息，写入同一份工作文档 |
-| 校验与修复 | 第六步独立 | 从正文判断主线与各段作用，再核对大纲；下一轮检查逐句支撑，发现问题后定向回退与复验 |
-| 个性化风格 | 第七步独立 | 调整作者特有的语气、节奏和表达方式，保存并复查 |
+| 准备：第一至三步 | 写作主 agent | 理解核心问题和材料，保存重点、段落作用和展开关系；文件末尾单列用户需求 |
+| 补充信息：第四步 | 写作主 agent | 按重点补充和核实材料，记录依据、出处、条件和缺口 |
+| 内容编辑：第五步 | 写作主 agent | 选择、解释和组织信息，写回同一份正文及必要大纲调整 |
+| 组织验收：第六步前半 | 提问子 agent | 从实际正文判断主线、层级、重点与段落作用，再对照必要大纲 |
+| 支撑验收：第六步后半 | 同一个提问子 agent | 逐句检查信息、推理、依据、忠实性与必要限定 |
+| 个性化风格：第七步 | 写作主 agent | 按作者声音调整表达，保存后交给提问方复验 |
 
 大纲明确标题关系、重点想说明的判断或问题，以及段落或段落组的作用。背景和过渡交代服务对象，不必各自提出观点，也不预先固定所有自然段。用户需求单列在文件末尾，只维护当前有效要求；后续局部改写在原纲要中修改相关部分。
 
 每轮修改针对具体问题。依据不足就补充材料，核心信息孤立就补足解释与关联，句间推理不成立就重新组织。已符合要求的内容保留，不为增加轮次而强行修改。
 
-入口只保留阶段导航；详细职责放在 [references](skills/chinese-expression/references/阶段交接.md)，进入哪一阶段就读取哪份指令。全程表达原则共享，保存、回读、回退与复查集中到一份交接规则，不在每个步骤反复叠加。
+两个入口分别路由各自的方法，进入相应阶段才读取对应文件。全程[表达原则](shared/表达原则.md)与[交接协议](shared/交接协议.md)共同维护；提问方的[修改后复验](skills/chinese-expression-review/references/修改后复验.md)检查原问题及关联影响，不由写作方自行宣布修复通过。
 
 任务目标用于理解文章方向，不转成固定观点、切入点、必写内容或评分表。验收仍采用技能已有的组织、解释、逻辑、支撑、事实与原意等判断条目，允许不同但成立的表达方案。
 
@@ -150,9 +157,9 @@ Agent 按阶段读取职责，在同一份工作文档上完成准备、补充�
 
 技能使用通用的 [Agent Skills 格式](https://agentskills.io/)，核心指令位于 `SKILL.md`。`agents/openai.yaml` 提供 Codex 的展示信息；其他工具可能忽略该文件。
 
-完整执行需要 agent 能读写文档；开放式写作和外部核验还需要搜索、读取来源的能力。技能本身不附带搜索服务、模型或文档编辑软件。仅有聊天输出的环境可以参考表达规则，但无法完整执行文件保存与回读流程。
+完整执行需要文件读写与子 agent 调度能力；开放式写作和外部核验还需要搜索、读取来源的能力。技能本身不附带模型、搜索服务或文档编辑软件。不能派发或完成独立验收时应说明未完成部分，不能由写作方模拟通过。
 
-通用模式依赖 agent 遵循阶段职责、重新读取文件并作判断；同一会话仍保留先前上下文。格式校验通过或完成流程不代表内容没有遗漏，涉及事实的最终稿仍需结合原始来源审阅。
+独立上下文仍取决于宿主的派发方式，只读职责也不等于文件权限沙盒。格式校验或完成流程不保证内容没有遗漏；涉及事实的稿件需依据原始来源检查。源包打包脚本只处理发布目录，不承担运行时写作、判断或调度。
 
 ## 文件与更新
 
@@ -161,29 +168,35 @@ expression_skill/
 ├── README.md
 ├── CHANGELOG.md
 ├── GRAY_TEST.md
+├── shared/
+│   ├── 表达原则.md
+│   └── 交接协议.md
+├── scripts/
+│   └── package_skills.py       将共享规则带入两个发布目录
 ├── examples/
 │   ├── 润色示例.md
 │   ├── jev/                  旧版示例及原始记录
 │   └── jev-mobile-v1.1/      v1.1.0 示例及原始记录
 └── skills/
-    └── chinese-expression/
-        ├── SKILL.md
-        ├── LICENSE
-        ├── references/
-        │   └── 分阶段职责与统一交接规则
-        └── agents/
-            └── openai.yaml
+    ├── chinese-expression/
+    │   ├── SKILL.md            写作与调度入口
+    │   ├── references/         准备、补充信息、内容编辑、风格、追问
+    │   └── agents/openai.yaml
+    └── chinese-expression-review/
+        ├── SKILL.md            提问与验收入口
+        ├── references/         组织、支撑、修改后复验
+        └── agents/openai.yaml
 ```
 
-技能规则以 `skills/chinese-expression/SKILL.md` 为准。更新记录与下载包见 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases)。
+角色职责以各自入口为准，共同标准和交接以 `shared/` 为准。更新记录见 [CHANGELOG](CHANGELOG.md)；正式历史包见 [Releases](https://github.com/IAIE-PhysicalAI/expression_skill/releases)。
 
-通过 skills CLI 安装后，可以使用该工具的更新功能；手动安装时，下载新版本并替换对应技能文件夹，替换前保留自己的定制内容。
+灰度更新先获取此分支的新提交，再打包到新的源包外目录，验证两个角色的版本后配套升级。直接从仓库源目录安装或只更新写作入口会丢失共享规则或造成角色版本混用。
 
 ## 反馈与改进
 
 欢迎通过 [Issues](https://github.com/IAIE-PhysicalAI/expression_skill/issues) 提交实际使用中遇到的问题。建议附上技能版本、使用的 agent、脱敏后的输入与输出，以及期望改善的具体地方。
 
-v2.0.0 已完成灰度实验并纳入 `main`。后续问题仍可按[使用测试与反馈指南](GRAY_TEST.md)记录版本、任务、实际正文和大纲，重点反馈主线展开、需求分离和局部修改是否有效。
+v3.0.0 当前仅在既有测试分支试用。请按[灰度测试与反馈指南](GRAY_TEST.md)记录两个角色版本、提交号、任务与实际操作，重点反馈角色是否越权、问题是否漏报或误报、修复是否真正复验，以及是否保留原意和证据边界。
 
 规则调整优先解决可复现的问题，并保持流程清楚、篇幅适当。
 

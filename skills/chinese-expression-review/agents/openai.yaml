@@ -1,0 +1,4 @@
+interface:
+  display_name: "语言表达验收"
+  short_description: "独立检查中文稿件的组织、逐句支撑与修改影响，报告实际问题并复验"
+  default_prompt: "请使用 $chinese-expression-review，只读检查指定稿件的组织、支撑与忠实性，依据原始材料报告实际问题；收到修复稿后独立复验，不修改正文。"
