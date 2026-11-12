@@ -1,4 +1,4 @@
 interface:
   display_name: "语言表达"
-  short_description: "负责中文写作、润色和定向修复，调度独立验收角色持续复验工作稿"
-  default_prompt: "请使用 $chinese-expression，由你负责写作和修复，派发并复用一个读取 $chinese-expression-review 的提问子 agent 独立验收，在同一工作稿上保留原意、依据边界与作者风格。"
+  short_description: "中文写作、润色与检查默认由单 agent 完成，明确要求严格校验模式时启用子 agent"
+  default_prompt: "请使用 $chinese-expression，由你完成写作、修复与检查，在同一工作稿上保留原意、依据边界与作者风格。"
