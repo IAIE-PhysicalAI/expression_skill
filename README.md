@@ -8,27 +8,28 @@
 
 技能主体、规则和使用提示均为中文。写作入口继续使用 `chinese-expression`，检查入口为 `chinese-expression-review`，两者配套安装。
 
-当前测试分支为 **`gray/v3.1.0`**，两个 skill 的 `metadata.version` 均为 `3.1.0`。`main` 和正式 Release 仍为 **v2.0.0**，详见[更新记录](CHANGELOG.md)。
+当前测试分支为 **`gray/v3.1.1`**，两个 skill 的 `metadata.version` 均为 `3.1.1`。`main` 和正式 Release 仍为 **v2.0.0**，详见[更新记录](CHANGELOG.md)。
 
 [写作入口](skills/chinese-expression/SKILL.md) · [验收入口](skills/chinese-expression-review/SKILL.md) · [灰度测试与反馈指南](GRAY_TEST.md) · [v2.0.0 正式包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v2.0.0) · [反馈问题](https://github.com/IAIE-PhysicalAI/expression_skill/issues)
 
-## v3.1.0 的变化
+## v3.1.1 的变化
 
-- 默认单 agent：写作、润色、仅检查、风格调整和追问都由当前 agent 执行，不初始化子 agent。“仔细检查”“严格检查”、长文或复杂任务不自动启用严格校验模式。
-- 严格校验仅在用户明确要求该模式时启用，调度说明按需读取。保留 v3.0.0 的独立验收入口与同一个提问子 agent 的复验流程。
-- 信息孤立检查扩展到影响后文理解的辅助概念：不必要的词语删去或改用熟悉说法，必要解释先于依赖它的内容；同一概念统一称呼，相似概念说明区别。
-- 在现有表达原则、内容编辑和支撑验收条目中补充概念规则，三个文件合计净增 224 个字符；保留原有组织、支撑、修复与复验标准。
+- 新增可选[实验报告模块](skills/chinese-expression/references/实验报告.md)，沿用本地已有内容，按“实验目的—实验对象—实验方法—实验数据—实验结论”组织；用户另有明确格式时按其要求调整。
+- 请求撰写、改写实验报告或明确选择该组织方式时，在准备或接续编辑前加载，贯穿大纲、正文及相关验收；仅讨论实验内容时不自动加载。
+- 强调样本计数单位、实际操作、指标含义、计算方式和结论边界。模块只补充表达要求，不额外要求开展实验、补做分析或增加写作轮次。
 
-保留原有阶段、同一工作稿、大纲与有效用户需求、事实边界和作者声音。v3.1.0 已完成格式、引用和打包检查，尚未完成系统性的真实任务灰度或对照实验。现有示例保留其原始版本与实际结果。
+沿用 v3.1.0 的默认单 agent、严格校验明确触发，以及辅助概念解释与用词一致性规则。验收入口通过已选模块及其文件位置接收要求。
+
+保留原有阶段、同一工作稿、大纲与有效用户需求、事实边界和作者声音。v3.1.1 已完成格式、引用和打包检查，尚未完成系统性的真实任务灰度或对照实验。现有示例保留其原始版本与实际结果。
 
 ## 安装灰度版
 
 ### 获取并打包源包
 
-从 `gray/v3.1.0` 测试分支获取新版。打包需要 Python 3.9 或以上，脚本只使用标准库；输出必须是源包之外的新目录，已有输出不会被覆盖。
+从 `gray/v3.1.1` 测试分支获取新版。打包需要 Python 3.9 或以上，脚本只使用标准库；输出必须是源包之外的新目录，已有输出不会被覆盖。
 
 ```bash
-git clone --branch gray/v3.1.0 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v3
+git clone --branch gray/v3.1.1 --single-branch https://github.com/IAIE-PhysicalAI/expression_skill.git expression-skill-v3
 git -C expression-skill-v3 rev-parse HEAD
 python3 expression-skill-v3/scripts/package_skills.py --output ./expression-skill-v3-install
 ```
@@ -53,11 +54,11 @@ npx skills add ./expression-skill-v3-install --list
 
 ### 手动安装与回退
 
-将打包结果中的 `chinese-expression/` 和 `chinese-expression-review/` 两个完整目录放在目标 agent 技能目录的同一层级，保留各自的 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`。两个入口的 `metadata.version` 应均为 `3.1.0`。
+将打包结果中的 `chinese-expression/` 和 `chinese-expression-review/` 两个完整目录放在目标 agent 技能目录的同一层级，保留各自的 `SKILL.md`、`references/`、`agents/` 和 `LICENSE`。两个入口的 `metadata.version` 应均为 `3.1.1`。
 
-升级前备份定制内容，再整目录替换，避免遗留旧版混合验收文件。回退使用 [v2.0.0 正式包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v2.0.0)，并移出 v3.1.0 专属的验收 skill，避免混用。备份保存在技能扫描目录之外。
+升级前备份定制内容，再整目录替换，避免遗留旧版混合验收文件。回退使用 [v2.0.0 正式包](https://github.com/IAIE-PhysicalAI/expression_skill/releases/tag/v2.0.0)，并移出 v3.1.1 专属的验收 skill，避免混用。备份保存在技能扫描目录之外。
 
-当前灰度没有 v3.1.0 正式 Release，`releases/latest` 仍提供 v2.0.0。也可在测试分支页面下载源包 ZIP，再按上述方式打包；不要将默认主分支下载误认为本灰度版。默认流程使用当前 agent 的文件与任务所需工具，仅严格校验模式需要子 agent 调度能力。
+当前灰度没有 v3.1.1 正式 Release，`releases/latest` 仍提供 v2.0.0。也可在测试分支页面下载源包 ZIP，再按上述方式打包；不要将默认主分支下载误认为本灰度版。默认流程使用当前 agent 的文件与任务所需工具，仅严格校验模式需要子 agent 调度能力。
 
 ## 使用
 
@@ -116,6 +117,16 @@ npx skills add ./expression-skill-v3-install --list
 ```
 
 只要求讨论或检查时，技能交付分析；明确要求修改时才接续编辑。局部改写使用原有大纲，在相关条目落实结构与重点变化，将当前有效的用户需求保存在文件末尾。
+
+### 实验报告
+
+```text
+请使用 $chinese-expression，根据 experiment-notes.md 撰写实验报告。
+面向第一次接触该实验的同事，说明目的、对象、方法、数据和结论。
+只使用已有记录，保留样本范围、指标口径及结论限制，缺失信息请指出。
+```
+
+该请求会加载实验报告模块，默认由当前 agent 完成。模块不触发严格校验模式；如需独立验收，仍须明确要求该模式。
 
 ## 实际示例：Jev 技术分享
 
@@ -187,8 +198,8 @@ expression_skill/
 │   └── jev-mobile-v1.1/      v1.1.0 示例及原始记录
 └── skills/
     ├── chinese-expression/
-│   ├── SKILL.md            写作与检查入口
-│   ├── references/         准备、补充信息、内容编辑、风格、追问、严格校验模式
+    │   ├── SKILL.md            写作与检查入口
+    │   ├── references/         各阶段方法、严格校验模式、实验报告可选模块
     │   └── agents/openai.yaml
     └── chinese-expression-review/
         ├── SKILL.md            提问与验收入口
@@ -204,7 +215,7 @@ expression_skill/
 
 欢迎通过 [Issues](https://github.com/IAIE-PhysicalAI/expression_skill/issues) 提交实际使用中遇到的问题。建议附上技能版本、使用的 agent、脱敏后的输入与输出，以及期望改善的具体地方。
 
-v3.1.0 当前仅在 `gray/v3.1.0` 测试分支试用。请按[灰度测试与反馈指南](GRAY_TEST.md)记录技能版本、执行模式、提交号、任务与实际操作，重点反馈是否误触发子 agent、概念是否突现或混用、修复是否真正复验，以及是否保留原意和证据边界。
+v3.1.1 当前仅在 `gray/v3.1.1` 测试分支试用。请按[灰度测试与反馈指南](GRAY_TEST.md)记录技能版本、执行模式、提交号、任务与实际操作，重点反馈是否误触发子 agent、概念是否突现或混用、修复是否真正复验，以及是否保留原意和证据边界。
 
 规则调整优先解决可复现的问题，并保持流程清楚、篇幅适当。
 
